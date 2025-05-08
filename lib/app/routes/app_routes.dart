@@ -6,6 +6,7 @@ abstract class Routes {
   static const HOME = _Paths.HOME;
   static const GENRE = _Paths.GENRE;
   static const COMIC_DETAIL = _Paths.COMIC_DETAIL;
+  static const CHAPTER = _Paths.CHAPTER;
 }
 
 abstract class _Paths {
@@ -13,4 +14,5 @@ abstract class _Paths {
   static const HOME = '/home';
   static const GENRE = '/genre';
   static const COMIC_DETAIL = '/comic-detail';
+  static const CHAPTER = '/chapter';
 }

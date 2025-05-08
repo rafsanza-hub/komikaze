@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:komikaze/app/modules/comic_detail/controllers/comic_detail_controller.dart';
+import 'package:komikaze/app/routes/app_pages.dart';
 
 class ComicDetailView extends GetView<ComicDetailController> {
   const ComicDetailView({super.key});
@@ -144,7 +145,10 @@ class ComicDetailView extends GetView<ComicDetailController> {
                       style: const TextStyle(color: Colors.white70),
                     ),
                     onTap: () {
-                      // Navigate to chapter reader using chapter.link
+                      Get.toNamed(Routes.CHAPTER, arguments: {
+                        'comicId': comic.comicId,
+                        'chapterId': chapter.chapterId,
+                      });
                     },
                   );
                 },
