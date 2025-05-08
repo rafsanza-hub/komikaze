@@ -1,8 +1,13 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:get/get.dart';
+import 'package:komikaze/app/modules/home/controllers/home_controller.dart';
 
-class HomeView extends StatelessWidget {
+const kBackgroundColor = Color(0xff121012);
+const kButtonColor = Color.fromARGB(255, 89, 54, 133);
+const kSearchbarColor = Color(0xff382C3E);
+
+class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
 
   @override
@@ -34,7 +39,9 @@ class HomeView extends StatelessWidget {
                         color: Colors.white,
                         size: 30,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        // Implement search functionality
+                      },
                     ),
                   ],
                 ),
@@ -49,32 +56,47 @@ class HomeView extends StatelessWidget {
   }
 }
 
-class KomikCardsSection extends StatelessWidget {
+class KomikCardsSection extends GetView<HomeController> {
   const KomikCardsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildHistorySection(context),
-        _buildSectionTitle(context, "Ongoing"),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: _buildOngoingGrid(context),
-        ),
-        _buildSectionTitle(context, "Genre pilihan"),
-        _buildGenreChips(context),
-        _buildSectionTitle(context, "Completed"),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: _buildKomikGrid(context),
-        ),
-      ],
-    );
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (controller.comicData.value.comicsList.isEmpty) {
+        return const Center(
+            child: Text('No comics available',
+                style: TextStyle(color: Colors.white)));
+      }
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHistorySection(context),
+          _buildSectionTitle(context, "Ongoing"),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: _buildOngoingGrid(context),
+          ),
+          _buildSectionTitle(context, "Genre pilihan"),
+          _buildGenreChips(context),
+          _buildSectionTitle(context, "Completed"),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: _buildKomikGrid(context),
+          ),
+        ],
+      );
+    });
   }
 
   Widget _buildHistorySection(BuildContext context) {
+    // Assuming the first comic in the list is the last viewed for demo purposes
+    final lastComic = controller.comicData.value.comicsList.isNotEmpty
+        ? controller.comicData.value.comicsList[0]
+        : null;
+
     return Container(
       height: 140,
       margin: const EdgeInsets.symmetric(vertical: 10),
@@ -84,10 +106,12 @@ class KomikCardsSection extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            image: const DecorationImage(
-              image: NetworkImage('https://via.placeholder.com/400x200'),
-              fit: BoxFit.cover,
-            ),
+            image: lastComic != null
+                ? DecorationImage(
+                    image: NetworkImage(lastComic.image),
+                    fit: BoxFit.cover,
+                  )
+                : null,
           ),
           child: Container(
             decoration: BoxDecoration(
@@ -114,9 +138,9 @@ class KomikCardsSection extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  "Judul Komik Terakhir",
-                  style: TextStyle(
+                Text(
+                  lastComic?.title ?? "No history",
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -126,7 +150,9 @@ class KomikCardsSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 TextButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    // Navigate to comic details
+                  },
                   icon: const Icon(
                     Icons.play_circle_outline,
                     color: Colors.white,
@@ -159,20 +185,9 @@ class KomikCardsSection extends StatelessWidget {
   }
 
   Widget _buildOngoingGrid(BuildContext context) {
-    final dummyKomikList = List.generate(
-        6,
-        (index) => Komik(
-              komikId: "$index",
-              title: "Komik Ongoing ${index + 1}",
-              poster: "https://via.placeholder.com/150x200",
-              rating: "0.0",
-              episode: "12",
-              type: "TV",
-              synopsis: "Synopsis placeholder",
-              genre: ["Action", "Adventure"],
-              status: "Ongoing",
-              totalEpisode: "24",
-            ));
+    final ongoingComics = controller.comicData.value.comicsList
+        .where((comic) => comic.status.toLowerCase() == 'ongoing')
+        .toList();
 
     return Container(
       height: 180,
@@ -181,18 +196,22 @@ class KomikCardsSection extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
-        itemCount: dummyKomikList.length,
+        itemCount: ongoingComics.length,
         itemBuilder: (context, index) {
+          final comic = ongoingComics[index];
           return Container(
             width: (MediaQuery.of(context).size.width - 48) / 3,
             margin: const EdgeInsets.only(right: 8),
             child: GestureDetector(
-                onTap: () {},
-                child: CustomCardNormal(
-                  title: "Naruto Shippuden",
-                  episodeCount: "24 Eps",
-                  imageUrl: "https://example.com/naruto-poster.jpg",
-                )),
+              onTap: () {
+                // Navigate to comic details
+              },
+              child: CustomCardNormal(
+                title: comic.title,
+                episodeCount: comic.chapter,
+                imageUrl: comic.image,
+              ),
+            ),
           );
         },
       ),
@@ -215,19 +234,9 @@ class KomikCardsSection extends StatelessWidget {
           ),
           if (title == "Completed" || title == "Ongoing")
             GestureDetector(
-              onTap: () {},
-              child: const Text(
-                "See all",
-                style: TextStyle(
-                  color: kButtonColor,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-            ),
-          if (title == "History")
-            GestureDetector(
-              onTap: () {},
+              onTap: () {
+                // Navigate to full list
+              },
               child: const Text(
                 "See all",
                 style: TextStyle(
@@ -243,20 +252,9 @@ class KomikCardsSection extends StatelessWidget {
   }
 
   Widget _buildKomikGrid(BuildContext context) {
-    final dummyKomikList = List.generate(
-        9,
-        (index) => Komik(
-              komikId: "$index",
-              title: "Komik Completed ${index + 1}",
-              poster: "https://via.placeholder.com/150x200",
-              rating: "0.0",
-              episode: "12",
-              type: "TV",
-              synopsis: "Synopsis placeholder",
-              genre: ["Action", "Adventure"],
-              status: "Completed",
-              totalEpisode: "24",
-            ));
+    final completedComics = controller.comicData.value.comicsList
+        .where((comic) => comic.status.toLowerCase() == 'completed')
+        .toList();
 
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
@@ -267,27 +265,26 @@ class KomikCardsSection extends StatelessWidget {
         crossAxisSpacing: 8,
         mainAxisSpacing: 12,
       ),
-      itemCount: dummyKomikList.length,
+      itemCount: completedComics.length,
       itemBuilder: (context, index) {
+        final comic = completedComics[index];
         return GestureDetector(
-            onTap: () {},
-            child: CustomCardNormal(
-              title: "Naruto Shippuden",
-              episodeCount: "24 Eps",
-              imageUrl: "https://example.com/naruto-poster.jpg",
-            ));
+          onTap: () {
+            // Navigate to comic details
+          },
+          child: CustomCardNormal(
+            title: comic.title,
+            episodeCount: comic.chapter,
+            imageUrl: comic.image,
+          ),
+        );
       },
     );
   }
 
   Widget _buildGenreChips(BuildContext context) {
-    final dummyGenres = [
-      {"title": "Action", "genreId": "1"},
-      {"title": "Adventure", "genreId": "2"},
-      {"title": "Comedy", "genreId": "3"},
-      {"title": "Drama", "genreId": "4"},
-      {"title": "Fantasy", "genreId": "5"},
-    ];
+    // Assuming genres are fetched separately or available in comicData.genres
+    final genres = controller.comicData.value.genres.cast<String>();
 
     return Container(
       height: 36,
@@ -296,9 +293,9 @@ class KomikCardsSection extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
-        itemCount: dummyGenres.length,
+        itemCount: genres.length,
         itemBuilder: (context, index) {
-          final genre = dummyGenres[index];
+          final genre = genres[index];
           return Padding(
             padding: const EdgeInsets.only(right: 8),
             child: ActionChip(
@@ -306,135 +303,19 @@ class KomikCardsSection extends StatelessWidget {
               side: BorderSide.none,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               label: Text(
-                genre["title"]!,
+                genre,
                 style: const TextStyle(
                   color: Colors.white54,
                   fontSize: 12,
                 ),
               ),
               onPressed: () {
-                // Navigation removed as it would require BLoC
+                // Navigate to genre-specific comics
               },
             ),
           );
         },
       ),
-    );
-  }
-}
-
-const kBackgroundColor = Color(0xff121012);
-const kButtonColor = Color.fromARGB(255, 89, 54, 133);
-const kSearchbarColor = Color(0xff382C3E);
-
-// Class dasar untuk properti umum komik
-class Komik {
-  final String komikId;
-  final String title;
-  final String poster;
-  final String rating;
-  final String episode;
-  final String type;
-  final String synopsis;
-  final List<String> genre;
-  final String status;
-  final String totalEpisode;
-
-  // Constructor dengan nilai default untuk static UI
-  const Komik({
-    this.komikId = "1",
-    this.title = "Judul Komik",
-    this.poster = "https://via.placeholder.com/150x200",
-    this.rating = "8.5",
-    this.episode = "12",
-    this.type = "TV",
-    this.synopsis = "Ini adalah sinopsis contoh untuk komik statis.",
-    this.genre = const ["Action", "Adventure"],
-    this.status = "Ongoing",
-    this.totalEpisode = "24",
-  });
-
-  // Method untuk membuat list komik dummy
-  static List<Komik> dummyList({int count = 6}) {
-    return List.generate(
-        count,
-        (index) => Komik(
-              komikId: "${index + 1}",
-              title: "Komik ${index + 1}",
-              poster:
-                  "https://via.placeholder.com/150x200?text=Komik+${index + 1}",
-              episode: "${index + 12}",
-              rating: (8.0 + (index * 0.1)).toStringAsFixed(1),
-            ));
-  }
-}
-
-// Class untuk komik yang masih ongoing
-
-class GenreResponse {
-  final int statusCode;
-  final String statusMessage;
-  final String message;
-  final bool ok;
-  final GenreData data;
-  final dynamic pagination;
-
-  GenreResponse({
-    required this.statusCode,
-    required this.statusMessage,
-    required this.message,
-    required this.ok,
-    required this.data,
-    this.pagination,
-  });
-
-  factory GenreResponse.fromJson(Map<String, dynamic> json) {
-    return GenreResponse(
-      statusCode: json['statusCode'],
-      statusMessage: json['statusMessage'],
-      message: json['message'],
-      ok: json['ok'],
-      data: GenreData.fromJson(json['data']),
-      pagination: json['pagination'],
-    );
-  }
-}
-
-class GenreData {
-  final List<Genre> genreList;
-
-  GenreData({
-    required this.genreList,
-  });
-
-  factory GenreData.fromJson(Map<String, dynamic> json) {
-    return GenreData(
-      genreList: (json['genreList'] as List)
-          .map((item) => Genre.fromJson(item))
-          .toList(),
-    );
-  }
-}
-
-class Genre {
-  final String title;
-  final String genreId;
-  final String href;
-  final String otakudesuUrl;
-
-  Genre({
-    required this.title,
-    required this.genreId,
-    required this.href,
-    required this.otakudesuUrl,
-  });
-
-  factory Genre.fromJson(Map<String, dynamic> json) {
-    return Genre(
-      title: json['title'],
-      genreId: json['genreId'],
-      href: json['href'],
-      otakudesuUrl: json['otakudesuUrl'],
     );
   }
 }
@@ -446,16 +327,15 @@ class CustomCardNormal extends StatelessWidget {
 
   const CustomCardNormal({
     super.key,
-    this.title = "Komik Title",
-    this.episodeCount = "12 Eps",
-    this.imageUrl = "https://via.placeholder.com/150x200",
+    required this.title,
+    required this.episodeCount,
+    required this.imageUrl,
   });
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Background Image Container
         Container(
           height: 180,
           width: 120,
@@ -481,8 +361,6 @@ class CustomCardNormal extends StatelessWidget {
             ),
           ),
         ),
-
-        // Episode Count Badge
         Positioned(
           left: 7,
           top: 8,
@@ -502,8 +380,6 @@ class CustomCardNormal extends StatelessWidget {
             ),
           ),
         ),
-
-        // Komik Title
         Positioned(
           left: 4,
           right: 4,
