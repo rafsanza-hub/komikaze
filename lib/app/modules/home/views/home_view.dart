@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 import 'package:komikaze/app/modules/home/controllers/home_controller.dart';
+import 'package:komikaze/app/routes/app_pages.dart';
 
 const kBackgroundColor = Color(0xff121012);
 const kButtonColor = Color.fromARGB(255, 89, 54, 133);
@@ -41,6 +42,7 @@ class HomeView extends GetView<HomeController> {
                       ),
                       onPressed: () {
                         // Implement search functionality
+                        Get.toNamed(Routes.COMIC_DETAIL);
                       },
                     ),
                   ],
@@ -204,7 +206,7 @@ class KomikCardsSection extends GetView<HomeController> {
             margin: const EdgeInsets.only(right: 8),
             child: GestureDetector(
               onTap: () {
-                // Navigate to comic details
+                Get.toNamed(Routes.COMIC_DETAIL, arguments: comic.comicId);
               },
               child: CustomCardNormal(
                 title: comic.title,

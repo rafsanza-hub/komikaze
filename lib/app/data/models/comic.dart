@@ -40,6 +40,7 @@ class ComicData {
 }
 
 class ComicsList {
+  final String comicId;
   final String title;
   final String link;
   final String image;
@@ -49,6 +50,7 @@ class ComicsList {
   final String status;
 
   ComicsList({
+    required this.comicId,
     required this.title,
     required this.link,
     required this.image,
@@ -59,6 +61,7 @@ class ComicsList {
   });
 
   factory ComicsList.fromJson(Map<String, dynamic> json) => ComicsList(
+        comicId: json["comicId"],
         title: json["title"],
         link: json["link"],
         image: json["image"],
@@ -69,6 +72,7 @@ class ComicsList {
       );
 
   Map<String, dynamic> toJson() => {
+        "comicId": comicId,
         "title": title,
         "link": link,
         "image": image,
