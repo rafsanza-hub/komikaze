@@ -283,9 +283,7 @@ class KomikCardsSection extends GetView<HomeController> {
   }
 
   Widget _buildGenreChips(BuildContext context) {
-    // Assuming genres are fetched separately or available in comicData.genres
-    final genres = controller.comicData.value.genres.cast<String>();
-
+    final genres = controller.genreController.genreData.value.genres;
     return Container(
       height: 36,
       margin: const EdgeInsets.only(bottom: 8),
@@ -303,14 +301,14 @@ class KomikCardsSection extends GetView<HomeController> {
               side: BorderSide.none,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               label: Text(
-                genre,
+                genre.name,
                 style: const TextStyle(
                   color: Colors.white54,
                   fontSize: 12,
                 ),
               ),
               onPressed: () {
-                // Navigate to genre-specific comics
+                // Navigate to genre-specific comics using genre.link
               },
             ),
           );

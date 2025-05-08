@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
 import 'package:komikaze/app/data/models/comic.dart';
 import 'package:komikaze/app/data/services/comic_service.dart';
+import 'package:komikaze/app/modules/genre/controllers/genre_controller.dart';
 
 class HomeController extends GetxController {
   final ComicService _comicService = ComicService();
+  final GenreController genreController = Get.find();
 
   var comicData = ComicData(
     comicsList: [],
@@ -31,7 +33,9 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
+    genreController.fetchGenres();
     fetchComics();
+    print('genre: ${genreController.genreData.value.genres}');
     super.onInit();
   }
 }
