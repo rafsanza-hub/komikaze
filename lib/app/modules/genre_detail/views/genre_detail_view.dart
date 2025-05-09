@@ -11,6 +11,18 @@ class GenreDetailView extends GetView<GenreDetailController> {
 
   @override
   Widget build(BuildContext context) {
+    final ScrollController scrollController = ScrollController();
+
+    // Deteksi akhir scroll untuk infinite scroll
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+              scrollController.position.maxScrollExtent * 0.8 &&
+          controller.hasMoreData.value &&
+          !controller.isLoadingMore.value) {
+        controller.fetchNextPage(Get.arguments as String);
+      }
+    });
+
     return Scaffold(
       backgroundColor: kBackgroundColor,
       appBar: AppBar(
@@ -33,7 +45,7 @@ class GenreDetailView extends GetView<GenreDetailController> {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
-        if (controller.genreDetailData.value.comicsList.isEmpty) {
+        if (controller.comicsList.isEmpty) {
           return const Center(
             child: Text(
               'No comics available for this genre',
@@ -41,31 +53,46 @@ class GenreDetailView extends GetView<GenreDetailController> {
             ),
           );
         }
-        final comics = controller.genreDetailData.value.comicsList;
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: GridView.builder(
+          child: CustomScrollView(
+            controller: scrollController,
             physics: const BouncingScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 0.7,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 12,
-            ),
-            itemCount: comics.length,
-            itemBuilder: (context, index) {
-              final comic = comics[index];
-              return GestureDetector(
-                onTap: () {
-                  Get.toNamed(Routes.COMIC_DETAIL, arguments: comic.comicId);
-                },
-                child: CustomCardNormal(
-                  title: comic.title,
-                  episodeCount: comic.chapter,
-                  imageUrl: comic.image,
+            slivers: [
+              SliverGrid(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 0.7,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 12,
                 ),
-              );
-            },
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final comic = controller.comicsList[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.COMIC_DETAIL,
+                            arguments: comic.comicId);
+                      },
+                      child: CustomCardNormal(
+                        title: comic.title,
+                        episodeCount: comic.chapter,
+                        imageUrl: comic.image,
+                      ),
+                    );
+                  },
+                  childCount: controller.comicsList.length,
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Obx(() => controller.isLoadingMore.value
+                    ? const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Center(child: CircularProgressIndicator()),
+                      )
+                    : const SizedBox.shrink()),
+              ),
+            ],
           ),
         );
       }),

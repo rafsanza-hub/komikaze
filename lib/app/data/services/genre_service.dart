@@ -22,10 +22,10 @@ class GenreService extends GetxService {
     }
   }
 
-  Future<ComicData> fetchGenreDetail(String genre) async {
+  Future<ComicData> fetchGenreDetail(String genre, {int page = 1}) async {
     try {
-      final response =
-          await http.get(Uri.parse('http://10.0.2.2:3000/api/genres/$genre'));
+      final response = await http
+          .get(Uri.parse('http://10.0.2.2:3000/api/genres/$genre?page=$page'));
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         print('genre rororo:' + jsonData['data'].toString());
