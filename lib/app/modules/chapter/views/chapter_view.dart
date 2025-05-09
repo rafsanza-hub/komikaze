@@ -14,6 +14,13 @@ class ChapterView extends GetView<ChapterController> {
     final chapterId = args['chapterId'] as String;
     controller.fetchChapter(comicId, chapterId);
 
+    // Preload gambar setelah data dimuat
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (controller.chapterData.value.chapter.images.isNotEmpty) {
+        _preloadImages(context, controller.chapterData.value.chapter.images);
+      }
+    });
+
     return Scaffold(
       backgroundColor: const Color(0xff121012),
       appBar: AppBar(
@@ -35,16 +42,11 @@ class ChapterView extends GetView<ChapterController> {
           children: [
             Expanded(
               child: ListView.builder(
+                // Tingkatkan cacheExtent untuk memuat gambar di luar layar
+                cacheExtent: 1000.0,
                 itemCount: chapter.images.length,
                 itemBuilder: (context, index) {
-                  return CachedNetworkImage(
-                    imageUrl: chapter.images[index],
-                    fit: BoxFit.contain,
-                    placeholder: (context, url) =>
-                        const Center(child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
-                  );
+                  return _buildImage(chapter.images[index], index);
                 },
               ),
             ),
@@ -96,5 +98,49 @@ class ChapterView extends GetView<ChapterController> {
         );
       }),
     );
+  }
+
+  // Widget untuk menampilkan gambar dengan progres loading
+  Widget _buildImage(String imageUrl, int index) {
+    return Container(
+      color: Colors.black,
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        fit: BoxFit.contain,
+        placeholder: (context, url) => const Center(
+          child: SizedBox(
+            height: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 8),
+                Text(
+                  'Loading image...',
+                  style: TextStyle(color: Colors.white70),
+                ),
+              ],
+            ),
+          ),
+        ),
+        errorWidget: (context, url, error) => const Center(
+          child: Icon(Icons.error, color: Colors.red),
+        ),
+      ),
+    );
+  }
+
+  // Fungsi untuk preload gambar secara berurutan
+  Future<void> _preloadImages(
+      BuildContext context, List<String> imageUrls) async {
+    for (var url in imageUrls) {
+      try {
+        final provider = CachedNetworkImageProvider(url);
+        await precacheImage(provider, context);
+      } catch (e) {
+        // Tangani error precache (opsional)
+        debugPrint('Error precaching image $url: $e');
+      }
+    }
   }
 }

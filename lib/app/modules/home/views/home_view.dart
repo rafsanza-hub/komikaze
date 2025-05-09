@@ -67,7 +67,8 @@ class KomikCardsSection extends GetView<HomeController> {
       if (controller.isLoading.value) {
         return const Center(child: CircularProgressIndicator());
       }
-      if (controller.comicData.value.comicsList.isEmpty) {
+      if (controller.comicData.value.comicsList.isEmpty &&
+          controller.popularKomikData.value.popularManga.isEmpty) {
         return const Center(
             child: Text('No comics available',
                 style: TextStyle(color: Colors.white)));
@@ -76,13 +77,18 @@ class KomikCardsSection extends GetView<HomeController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHistorySection(context),
-          _buildSectionTitle(context, "Ongoing"),
+          _buildSectionTitle(context, "Top 10 Popular"),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: _buildOngoingGrid(context),
+            child: _buildPopularGrid(context),
           ),
           _buildSectionTitle(context, "Genre pilihan"),
           _buildGenreChips(context),
+          _buildSectionTitle(context, "Terbaru"),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: _buildTerbaruGrid(context),
+          ),
           _buildSectionTitle(context, "Completed"),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -94,7 +100,6 @@ class KomikCardsSection extends GetView<HomeController> {
   }
 
   Widget _buildHistorySection(BuildContext context) {
-    // Assuming the first comic in the list is the last viewed for demo purposes
     final lastComic = controller.comicData.value.comicsList.isNotEmpty
         ? controller.comicData.value.comicsList[0]
         : null;
@@ -153,7 +158,10 @@ class KomikCardsSection extends GetView<HomeController> {
                 const SizedBox(height: 8),
                 TextButton.icon(
                   onPressed: () {
-                    // Navigate to comic details
+                    if (lastComic != null) {
+                      Get.toNamed(Routes.COMIC_DETAIL,
+                          arguments: lastComic.comicId);
+                    }
                   },
                   icon: const Icon(
                     Icons.play_circle_outline,
@@ -186,10 +194,8 @@ class KomikCardsSection extends GetView<HomeController> {
     );
   }
 
-  Widget _buildOngoingGrid(BuildContext context) {
-    final ongoingComics = controller.comicData.value.comicsList
-        .where((comic) => comic.status.toLowerCase() == 'ongoing')
-        .toList();
+  Widget _buildPopularGrid(BuildContext context) {
+    final popularComics = controller.popularKomikData.value.popularManga;
 
     return Container(
       height: 180,
@@ -198,9 +204,9 @@ class KomikCardsSection extends GetView<HomeController> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
-        itemCount: ongoingComics.length,
+        itemCount: popularComics.length,
         itemBuilder: (context, index) {
-          final comic = ongoingComics[index];
+          final comic = popularComics[index];
           return Container(
             width: (MediaQuery.of(context).size.width - 48) / 3,
             margin: const EdgeInsets.only(right: 8),
@@ -210,7 +216,7 @@ class KomikCardsSection extends GetView<HomeController> {
               },
               child: CustomCardNormal(
                 title: comic.title,
-                episodeCount: comic.chapter,
+                episodeCount: 'Rank ${comic.rank}',
                 imageUrl: comic.image,
               ),
             ),
@@ -220,36 +226,34 @@ class KomikCardsSection extends GetView<HomeController> {
     );
   }
 
-  Widget _buildSectionTitle(BuildContext context, String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          if (title == "Completed" || title == "Ongoing")
-            GestureDetector(
-              onTap: () {
-                // Navigate to full list
-              },
-              child: const Text(
-                "See all",
-                style: TextStyle(
-                  color: kButtonColor,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-            ),
-        ],
+  Widget _buildTerbaruGrid(BuildContext context) {
+    final terbaruComics = controller.comicData.value.comicsList
+        .where((comic) => comic.status.toLowerCase() == 'ongoing')
+        .toList();
+
+    return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        childAspectRatio: 0.7,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 12,
       ),
+      itemCount: terbaruComics.length,
+      itemBuilder: (context, index) {
+        final comic = terbaruComics[index];
+        return GestureDetector(
+          onTap: () {
+            Get.toNamed(Routes.COMIC_DETAIL, arguments: comic.comicId);
+          },
+          child: CustomCardNormal(
+            title: comic.title,
+            episodeCount: comic.chapter,
+            imageUrl: comic.image,
+          ),
+        );
+      },
     );
   }
 
@@ -272,7 +276,7 @@ class KomikCardsSection extends GetView<HomeController> {
         final comic = completedComics[index];
         return GestureDetector(
           onTap: () {
-            // Navigate to comic details
+            Get.toNamed(Routes.COMIC_DETAIL, arguments: comic.comicId);
           },
           child: CustomCardNormal(
             title: comic.title,
@@ -286,6 +290,7 @@ class KomikCardsSection extends GetView<HomeController> {
 
   Widget _buildGenreChips(BuildContext context) {
     final genres = controller.genreController.genreData.value.genres;
+
     return Container(
       height: 36,
       margin: const EdgeInsets.only(bottom: 8),
@@ -318,6 +323,41 @@ class KomikCardsSection extends GetView<HomeController> {
       ),
     );
   }
+
+  Widget _buildSectionTitle(BuildContext context, String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          if (title == "Completed" ||
+              title == "Terbaru" ||
+              title == "Top 10 Popular")
+            GestureDetector(
+              onTap: () {
+                // Navigate to full list
+              },
+              child: const Text(
+                "See all",
+                style: TextStyle(
+                  color: kButtonColor,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 }
 
 class CustomCardNormal extends StatelessWidget {
@@ -343,7 +383,7 @@ class CustomCardNormal extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             image: DecorationImage(
-              image: NetworkImage(imageUrl),
+              image: CachedNetworkImageProvider(imageUrl),
               fit: BoxFit.cover,
             ),
           ),

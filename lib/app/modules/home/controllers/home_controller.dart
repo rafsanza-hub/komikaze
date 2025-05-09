@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:komikaze/app/data/models/comic.dart';
+import 'package:komikaze/app/data/models/popular_comic.dart';
 import 'package:komikaze/app/data/services/comic_service.dart';
 import 'package:komikaze/app/modules/genre/controllers/genre_controller.dart';
 
@@ -18,6 +19,7 @@ class HomeController extends GetxController {
   ).obs;
 
   var isLoading = false.obs;
+  var popularKomikData = PopularKomikData(popularManga: [], source: "").obs;
 
   Future<void> fetchComics() async {
     try {
@@ -31,10 +33,22 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<void> fetchPopularComics() async {
+    try {
+      isLoading(true);
+      popularKomikData.value = await _comicService.fetchPopularComics();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to fetch popular comics: $e');
+    } finally {
+      isLoading(false);
+    }
+  }
+
   @override
   void onInit() {
     genreController.fetchGenres();
     fetchComics();
+    fetchPopularComics();
     print('genre: ${genreController.genreData.value.genres}');
     super.onInit();
   }
