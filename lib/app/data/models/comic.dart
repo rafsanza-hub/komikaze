@@ -105,8 +105,8 @@ class Pagination {
 
   factory Pagination.fromJson(Map<String, dynamic> json) => Pagination(
         currentPage: json["currentPage"],
-        prevPage: json["prevPage"],
-        nextPage: json["nextPage"],
+        prevPage: json["prevPage"] ?? 1,
+        nextPage: json["nextPage"] ?? 1,
       );
 
   Map<String, dynamic> toJson() => {

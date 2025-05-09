@@ -45,7 +45,7 @@ class GenreDetailController extends GetxController {
 
   @override
   void onInit() {
-    final genre = Get.arguments as String;
+    final genre = Get.arguments.toString();
     fetchGenreDetail(genre);
     super.onInit();
   }

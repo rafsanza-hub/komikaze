@@ -11,6 +11,7 @@ void main() {
       title: "Application",
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.dark,
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
     ),
