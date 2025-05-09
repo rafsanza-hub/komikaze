@@ -65,10 +65,25 @@ class ComicService {
             'Failed to fetch popular comics: ${response.statusCode}');
       }
     } catch (e) {
-        print('popular komik: $e');
+      print('popular komik: $e');
       throw Exception('Error fetching popular comics: $e');
     }
   }
 
-
+  Future<ComicData> searchComics(String query) async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:3000/api/search?query=$query'),
+      );
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        return ComicData.fromJson(jsonData['data']);
+      } else {
+        throw Exception(
+            'Failed to fetch search results: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error fetching search results: $e');
+    }
+  }
 }

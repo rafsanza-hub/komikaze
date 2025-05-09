@@ -9,6 +9,7 @@ abstract class Routes {
   static const CHAPTER = _Paths.CHAPTER;
   static const GENRE_DETAIL = _Paths.GENRE_DETAIL;
   static const MAIN = _Paths.MAIN;
+  static const SEARCH = _Paths.SEARCH;
 }
 
 abstract class _Paths {
@@ -19,4 +20,5 @@ abstract class _Paths {
   static const CHAPTER = '/chapter';
   static const GENRE_DETAIL = '/genre-detail';
   static const MAIN = '/main';
+  static const SEARCH = '/search';
 }

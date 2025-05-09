@@ -42,8 +42,7 @@ class HomeView extends GetView<HomeController> {
                         size: 30,
                       ),
                       onPressed: () {
-                        // Implement search functionality
-                        Get.toNamed(Routes.COMIC_DETAIL);
+                        Get.toNamed(Routes.SEARCH);
                       },
                     ),
                   ],
