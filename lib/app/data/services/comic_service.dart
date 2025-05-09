@@ -69,4 +69,6 @@ class ComicService {
       throw Exception('Error fetching popular comics: $e');
     }
   }
+
+
 }

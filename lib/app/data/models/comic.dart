@@ -1,41 +1,50 @@
 class ComicData {
   final List<ComicsList> comicsList;
-  final int page;
-  final List<dynamic> genres;
-  final String status;
-  final String type;
-  final String orderby;
+  final Pagination? pagination;
   final String source;
+  final int? page;
+  final List<dynamic>? genres;
+  final String? status;
+  final String? type;
+  final String? orderby;
 
   ComicData({
     required this.comicsList,
-    required this.page,
-    required this.genres,
-    required this.status,
-    required this.type,
-    required this.orderby,
+    this.pagination,
     required this.source,
+    this.page,
+    this.genres,
+    this.status,
+    this.type,
+    this.orderby,
   });
 
   factory ComicData.fromJson(Map<String, dynamic> json) => ComicData(
         comicsList: List<ComicsList>.from(
             json["comicsList"].map((x) => ComicsList.fromJson(x))),
-        page: json["page"],
-        genres: List<dynamic>.from(json["genres"].map((x) => x)),
-        status: json["status"],
-        type: json["type"],
-        orderby: json["orderby"],
-        source: json["source"],
+        pagination: json["pagination"] == null
+            ? null
+            : Pagination.fromJson(json["pagination"]),
+        source: json["source"] ?? '',
+        page: json["page"] ?? 1,
+        genres: json["genres"] == null
+            ? []
+            : List<dynamic>.from(json["genres"]!.map((x) => x)),
+        status: json["status"] ?? '',
+        type: json["type"] ?? '',
+        orderby: json["orderby"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
         "comicsList": List<dynamic>.from(comicsList.map((x) => x.toJson())),
+        "pagination": pagination?.toJson(),
+        "source": source,
         "page": page,
-        "genres": List<dynamic>.from(genres.map((x) => x)),
+        "genres":
+            genres == null ? [] : List<dynamic>.from(genres!.map((x) => x)),
         "status": status,
         "type": type,
         "orderby": orderby,
-        "source": source,
       };
 }
 
@@ -47,7 +56,7 @@ class ComicsList {
   final String type;
   final String chapter;
   final String rating;
-  final String status;
+  final String? status;
 
   ComicsList({
     required this.comicId,
@@ -57,7 +66,7 @@ class ComicsList {
     required this.type,
     required this.chapter,
     required this.rating,
-    required this.status,
+     this.status,
   });
 
   factory ComicsList.fromJson(Map<String, dynamic> json) => ComicsList(
@@ -68,7 +77,7 @@ class ComicsList {
         type: json["type"],
         chapter: json["chapter"],
         rating: json["rating"],
-        status: json["status"],
+        status: json["status"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -80,5 +89,29 @@ class ComicsList {
         "chapter": chapter,
         "rating": rating,
         "status": status,
+      };
+}
+
+class Pagination {
+  final int currentPage;
+  final dynamic prevPage;
+  final int nextPage;
+
+  Pagination({
+    required this.currentPage,
+    required this.prevPage,
+    required this.nextPage,
+  });
+
+  factory Pagination.fromJson(Map<String, dynamic> json) => Pagination(
+        currentPage: json["currentPage"],
+        prevPage: json["prevPage"],
+        nextPage: json["nextPage"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "currentPage": currentPage,
+        "prevPage": prevPage,
+        "nextPage": nextPage,
       };
 }
