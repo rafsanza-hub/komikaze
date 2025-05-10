@@ -10,9 +10,9 @@ class ChapterView extends GetView<ChapterController> {
   Widget build(BuildContext context) {
     // Ambil comicId dan chapterId dari argumen navigasi
     final args = Get.arguments as Map<String, dynamic>;
-    final comicId = args['comicId'] as String;
+
     final chapterId = args['chapterId'] as String;
-    controller.fetchChapter(comicId, chapterId);
+    controller.fetchChapter(chapterId);
 
     // Preload gambar setelah data dimuat
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -23,81 +23,150 @@ class ChapterView extends GetView<ChapterController> {
 
     return Scaffold(
       backgroundColor: const Color(0xff121012),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text('Chapter Reader'),
+      body: Stack(
+        children: [
+          _buildContent(),
+          _buildFloatingNavigation(),
+        ],
       ),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (controller.chapterData.value.chapter.images.isEmpty) {
-          return const Center(
-              child: Text('No images available',
-                  style: TextStyle(color: Colors.white)));
-        }
-        final chapter = controller.chapterData.value.chapter;
-        return Column(
+    );
+  }
+
+  Widget _buildContent() {
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (controller.chapterData.value.chapter.images.isEmpty) {
+        return const Center(
+            child: Text('No images available',
+                style: TextStyle(color: Colors.white)));
+      }
+      final chapter = controller.chapterData.value.chapter;
+      return GestureDetector(
+        onTap: () {
+          controller.toggleNavigationVisibility();
+        },
+        behavior: HitTestBehavior.opaque,
+        child: ListView.builder(
+          // Tingkatkan cacheExtent untuk memuat gambar di luar layar
+          cacheExtent: 1000.0,
+          itemCount: chapter.images.length,
+          itemBuilder: (context, index) {
+            return _buildImage(chapter.images[index], index);
+          },
+        ),
+      );
+    });
+  }
+
+  Widget _buildFloatingNavigation() {
+    return Obx(() {
+      if (!controller.showNavigation.value) return const SizedBox.shrink();
+
+      final chapter = controller.chapterData.value.chapter;
+      return Positioned(
+        bottom: 0,
+        left: 0,
+        right: 0,
+        child: Column(
           children: [
-            Expanded(
-              child: ListView.builder(
-                // Tingkatkan cacheExtent untuk memuat gambar di luar layar
-                cacheExtent: 1000.0,
-                itemCount: chapter.images.length,
-                itemBuilder: (context, index) {
-                  return _buildImage(chapter.images[index], index);
-                },
+            // Floating Navigation Bar
+            Container(
+              height: 60,
+              margin: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.8),
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
-            ),
-            // Navigation Buttons
-            Padding(
-              padding: const EdgeInsets.all(16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ElevatedButton(
+                  // Previous Chapter Button
+                  IconButton(
+                    icon: const Icon(Icons.chevron_left, size: 30),
+                    color: chapter.previousChapter.isNotEmpty
+                        ? Colors.white
+                        : Colors.grey,
                     onPressed: chapter.previousChapter.isNotEmpty
                         ? () => controller
                             .navigateToChapter(chapter.previousChapter)
                         : null,
-                    child: const Text('Previous'),
                   ),
-                  ElevatedButton(
+
+                  // Comic Title
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        controller.chapterData.value.chapter.chapterId,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+
+                  // Next Chapter Button
+                  IconButton(
+                    icon: const Icon(Icons.chevron_right, size: 30),
+                    color: chapter.nextChapter != null
+                        ? Colors.white
+                        : Colors.grey,
                     onPressed: chapter.nextChapter != null
                         ? () =>
                             controller.navigateToChapter(chapter.nextChapter)
                         : null,
-                    child: const Text('Next'),
                   ),
                 ],
               ),
             ),
+
             // Chapter List
-            Container(
-              height: 100,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: chapter.chapters.length,
-                itemBuilder: (context, index) {
-                  final chapterElement = chapter.chapters[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: ActionChip(
-                      label: Text(chapterElement.title),
-                      onPressed: () {
-                        controller.navigateToChapter(chapterElement.chapterId);
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
+            // if (controller.chapterData.value.chapter.chapters.isEmpty)
+            //   Container(
+            //     height: 80,
+            //     padding: const EdgeInsets.symmetric(horizontal: 16),
+            //     child: ListView.builder(
+            //       scrollDirection: Axis.horizontal,
+            //       itemCount: chapter.chapters.length,
+            //       itemBuilder: (context, index) {
+            //         final chapterElement = chapter.chapters[index];
+            //         return Padding(
+            //           padding: const EdgeInsets.only(right: 8),
+            //           child: ActionChip(
+            //             backgroundColor:
+            //                 chapterElement.chapterId == chapter.chapterId
+            //                     ? Colors.purple
+            //                     : Colors.grey[800],
+            //             label: Text(
+            //               chapterElement.title,
+            //               style: const TextStyle(color: Colors.white),
+            //             ),
+            //             onPressed: () {
+            //               controller
+            //                   .navigateToChapter(chapterElement.chapterId);
+            //             },
+            //           ),
+            //         );
+            //       },
+            //     ),
+            //   ),
           ],
-        );
-      }),
-    );
+        ),
+      );
+    });
   }
 
   // Widget untuk menampilkan gambar dengan progres loading

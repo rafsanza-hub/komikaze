@@ -37,7 +37,7 @@ class ComicService {
     }
   }
 
-  Future<ChapterData> fetchChapter(String comicId, String chapterId) async {
+  Future<ChapterData> fetchChapter(String chapterId) async {
     try {
       final response = await http
           .get(Uri.parse('http://10.0.2.2:3000/api/chapters/$chapterId'));
