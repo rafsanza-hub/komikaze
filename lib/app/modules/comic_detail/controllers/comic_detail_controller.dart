@@ -37,4 +37,19 @@ class ComicDetailController extends GetxController {
       isLoading(false);
     }
   }
+
+  final filteredChapters = <Chapter>[].obs;
+
+  void filterChapters(String query) {
+    if (query.isEmpty) {
+      filteredChapters.clear();
+      return;
+    }
+
+    final comic = comicDetailData.value.comicDetail;
+    filteredChapters.assignAll(comic.chapters
+        .where((chapter) =>
+            chapter.title.toLowerCase().contains(query.toLowerCase()))
+        .toList());
+  }
 }

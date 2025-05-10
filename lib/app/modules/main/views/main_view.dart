@@ -22,7 +22,7 @@ class MainView extends GetView<MainController> {
         ),
       ),
       bottomNavigationBar: Obx(() => SizedBox(
-            height: 90,
+            height: 70,
             child: BottomNavigationBar(
               backgroundColor: kBackgroundColor,
               currentIndex: controller.index.value,

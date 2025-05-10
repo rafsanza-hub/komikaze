@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:komikaze/app/data/services/genre_service.dart';
 import 'package:komikaze/app/modules/genre/controllers/genre_controller.dart';
 
 import '../controllers/home_controller.dart';
