@@ -152,7 +152,7 @@ class KomikCardsSection extends GetView<HomeController> {
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
-                  maxLines: 2,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 8),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:komikaze/app/modules/home/views/home_view.dart';
 
 import '../controllers/main_controller.dart';
@@ -22,7 +23,6 @@ class MainView extends GetView<MainController> {
         ),
       ),
       bottomNavigationBar: Obx(() => SizedBox(
-            height: 70,
             child: BottomNavigationBar(
               backgroundColor: kBackgroundColor,
               currentIndex: controller.index.value,
@@ -30,15 +30,17 @@ class MainView extends GetView<MainController> {
               selectedItemColor: Theme.of(context).colorScheme.primary,
               unselectedItemColor: Theme.of(context).unselectedWidgetColor,
               type: BottomNavigationBarType.fixed,
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
+              // showSelectedLabels: false,
+              // showUnselectedLabels: false,
               items: const [
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.home_filled), label: ''),
-                BottomNavigationBarItem(icon: Icon(Icons.search), label: ''),
+                    icon: Icon(Iconsax.home_2_copy), label: 'Home'),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.history_rounded), label: ''),
-                BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
+                    icon: Icon(Iconsax.search_normal_1_copy), label: 'Search'),
+                BottomNavigationBarItem(
+                    icon: Icon(Iconsax.clock_copy), label: 'History'),
+                BottomNavigationBarItem(
+                    icon: Icon(Iconsax.user_copy), label: 'Profile'),
               ],
             ),
           )),

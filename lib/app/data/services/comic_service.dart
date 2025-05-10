@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:komikaze/app/core/config/config.dart';
 import 'package:komikaze/app/data/models/chapter.dart';
 import 'package:komikaze/app/data/models/comic.dart';
 import 'package:komikaze/app/data/models/comic_detail.dart';
@@ -9,7 +10,7 @@ class ComicService {
   Future<ComicData> fetchComics() async {
     try {
       final response =
-          await http.get(Uri.parse('http://10.0.2.2:3000/api/comics'));
+          await http.get(Uri.parse('${AppConfig.baseUrl}/comics'));
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         return ComicData.fromJson(jsonData['data']);
@@ -25,7 +26,7 @@ class ComicService {
     print('comic id: $comicId');
     try {
       final response =
-          await http.get(Uri.parse('http://10.0.2.2:3000/api/comics/$comicId'));
+          await http.get(Uri.parse('${AppConfig.baseUrl}/comics/$comicId'));
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         return ComicDetailData.fromJson(jsonData['data']);
@@ -40,7 +41,7 @@ class ComicService {
   Future<ChapterData> fetchChapter(String chapterId) async {
     try {
       final response = await http
-          .get(Uri.parse('http://10.0.2.2:3000/api/chapters/$chapterId'));
+          .get(Uri.parse('${AppConfig.baseUrl}/chapters/$chapterId'));
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         return ChapterData.fromJson(jsonData['data']);
@@ -55,7 +56,7 @@ class ComicService {
   Future<PopularKomikData> fetchPopularComics() async {
     try {
       final response =
-          await http.get(Uri.parse('http://10.0.2.2:3000/api/popular-manga'));
+          await http.get(Uri.parse('${AppConfig.baseUrl}/popular-manga'));
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         print('popular komik: ${jsonData['data']}');
@@ -73,7 +74,7 @@ class ComicService {
   Future<ComicData> searchComics(String query) async {
     try {
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:3000/api/search?query=$query'),
+        Uri.parse('${AppConfig.baseUrl}/search?query=$query'),
       );
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);

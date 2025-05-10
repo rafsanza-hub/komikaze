@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:komikaze/app/data/models/chapter.dart';
 import 'package:komikaze/app/data/services/comic_service.dart';
 import 'package:komikaze/app/modules/chapter/views/chapter_view.dart';
+import 'package:komikaze/app/routes/app_pages.dart';
 
 class ChapterController extends GetxController {
   final ComicService _comicService = ComicService();
@@ -32,9 +33,7 @@ class ChapterController extends GetxController {
 
   void navigateToChapter(String? chapterId) {
     if (chapterId != null && chapterId.isNotEmpty) {
-      final comicId = Get.arguments['comicId'] as String;
-      Get.off(() => const ChapterView(),
-          arguments: {'comicId': comicId, 'chapterId': chapterId});
+      Get.toNamed(Routes.CHAPTER, arguments: {'chapterId': chapterId});
     }
   }
 

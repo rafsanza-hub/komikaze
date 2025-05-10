@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:komikaze/app/modules/chapter/controllers/chapter_controller.dart';
+import 'package:komikaze/app/routes/app_pages.dart';
 
 class ChapterView extends GetView<ChapterController> {
   const ChapterView({super.key});
@@ -92,15 +93,18 @@ class ChapterView extends GetView<ChapterController> {
                 children: [
                   // Previous Chapter Button
                   IconButton(
-                    icon: const Icon(Icons.chevron_left, size: 30),
-                    color: chapter.previousChapter.isNotEmpty
-                        ? Colors.white
-                        : Colors.grey,
-                    onPressed: chapter.previousChapter.isNotEmpty
-                        ? () => controller
-                            .navigateToChapter(chapter.previousChapter)
-                        : null,
-                  ),
+                      icon: const Icon(Icons.chevron_left, size: 30),
+                      color: chapter.previousChapter.isNotEmpty
+                          ? Colors.white
+                          : Colors.grey,
+                      onPressed: () {
+                        if (chapter.previousChapter.isEmpty) return;
+                        final previousChapter =
+                            chapter.previousChapter.split('/').elementAt(4);
+
+                        Get.offNamed('chapter/$previousChapter',
+                            arguments: {'chapterId': previousChapter});
+                      }),
 
                   // Comic Title
                   Expanded(
@@ -120,15 +124,18 @@ class ChapterView extends GetView<ChapterController> {
 
                   // Next Chapter Button
                   IconButton(
-                    icon: const Icon(Icons.chevron_right, size: 30),
-                    color: chapter.nextChapter != null
-                        ? Colors.white
-                        : Colors.grey,
-                    onPressed: chapter.nextChapter != null
-                        ? () =>
-                            controller.navigateToChapter(chapter.nextChapter)
-                        : null,
-                  ),
+                      icon: const Icon(Icons.chevron_right, size: 30),
+                      color: chapter.nextChapter != null
+                          ? Colors.white
+                          : Colors.grey,
+                      onPressed: () {
+                        if (chapter.nextChapter == null) return;
+                        final nextChapter =
+                            chapter.nextChapter!.split('/').elementAt(4);
+
+                        Get.offNamed('chapter/$nextChapter',
+                            arguments: {'chapterId': nextChapter});
+                      }),
                 ],
               ),
             ),

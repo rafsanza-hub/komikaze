@@ -45,7 +45,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.GENRE_DETAIL,
-      page: () => const GenreDetailView(),
+      page: () => GenreDetailView(),
       binding: GenreDetailBinding(),
     ),
     GetPage(

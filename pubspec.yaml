@@ -35,6 +35,7 @@ dependencies:
   get: ^4.7.2
   http: ^1.4.0
   iconsax: ^0.0.8
+  iconsax_flutter: ^1.0.0
   readmore: ^3.0.0
 
 dev_dependencies:

@@ -243,25 +243,19 @@ class ComicDetailView extends GetView<ComicDetailController> {
         ),
         const SizedBox(height: 10),
         // Add search bar for chapters
-        Container(
-          decoration: BoxDecoration(
-            color: kSearchbarColor,
-            borderRadius: BorderRadius.circular(12),
+        TextField(
+          controller: searchController,
+          style: const TextStyle(color: Colors.white),
+          decoration: const InputDecoration(
+            hintText: 'Search chapters...',
+            hintStyle: TextStyle(color: Colors.white54),
+            border: InputBorder.none,
+            icon: Icon(Icons.search, color: Colors.white54),
+            // fillColor: kSearchbarColor,
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: TextField(
-            controller: searchController,
-            style: const TextStyle(color: Colors.white),
-            decoration: const InputDecoration(
-              hintText: 'Search chapters...',
-              hintStyle: TextStyle(color: Colors.white54),
-              border: InputBorder.none,
-              icon: Icon(Icons.search, color: Colors.white54),
-            ),
-            onChanged: (value) {
-              controller.filterChapters(value);
-            },
-          ),
+          onChanged: (value) {
+            controller.filterChapters(value);
+          },
         ),
         const SizedBox(height: 10),
         Obx(() {
@@ -393,6 +387,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
   }
 
   void _navigateToChapter(BuildContext context, String chapterId) {
+    print('chapter id: $chapterId');
     Get.toNamed(Routes.CHAPTER, arguments: {'chapterId': chapterId});
   }
 }
