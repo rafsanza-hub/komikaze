@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:komikaze/app/data/models/chapter.dart';
 import 'package:komikaze/app/data/services/comic_service.dart';
-import 'package:komikaze/app/modules/chapter/views/chapter_view.dart';
 import 'package:komikaze/app/routes/app_pages.dart';
 
 class ChapterController extends GetxController {
