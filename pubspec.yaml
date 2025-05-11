@@ -36,6 +36,7 @@ dependencies:
   flutter:
     sdk: flutter
   get: ^4.7.2
+  google_sign_in: ^6.3.0
   http: ^1.4.0
   iconsax_flutter: ^1.0.0
   readmore: ^3.0.0
