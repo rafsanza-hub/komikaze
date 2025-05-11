@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:komikaze/app/data/models/comic_detail.dart';
+import 'package:komikaze/app/data/models/history.dart';
 import 'package:komikaze/app/modules/comic_detail/controllers/comic_detail_controller.dart';
+import 'package:komikaze/app/modules/history/controllers/history_controller.dart';
 import 'package:komikaze/app/routes/app_pages.dart';
 import 'package:readmore/readmore.dart';
 
@@ -12,7 +14,6 @@ class ComicDetailView extends GetView<ComicDetailController> {
   Widget build(BuildContext context) {
     final comicId = Get.arguments as String;
     controller.fetchComicDetail(comicId);
-    // final HistoryController historyController = Get.put(HistoryController());
 
     return Scaffold(
       backgroundColor: kBackgroundColor,
@@ -29,7 +30,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
         return _buildContent(
           context,
           comic,
-          controller, /* historyController */
+          controller,
         );
       }),
     );
@@ -39,7 +40,6 @@ class ComicDetailView extends GetView<ComicDetailController> {
     BuildContext context,
     ComicDetail comic,
     ComicDetailController controller,
-    // HistoryController historyController,
   ) {
     return Stack(
       children: [
@@ -60,8 +60,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
                     const SizedBox(height: 10),
                     _buildInfoSection(comic),
                     const SizedBox(height: 10),
-                    _buildChaptersList(
-                        context, comic.chapters /* historyController */),
+                    _buildChaptersList(context, comic, comic.chapters),
                     const SizedBox(height: 100),
                   ],
                 ),
@@ -71,7 +70,9 @@ class ComicDetailView extends GetView<ComicDetailController> {
         ),
         _buildCloseButton(context),
         _buildReadButton(
-            context, comic.chapters.last.chapterId /* historyController */),
+          context,
+          comic,
+        ),
       ],
     );
   }
@@ -226,6 +227,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
 
   Widget _buildChaptersList(
     BuildContext context,
+    ComicDetail comic,
     List<Chapter> chapters,
   ) {
     final TextEditingController searchController = TextEditingController();
@@ -283,7 +285,8 @@ class ComicDetailView extends GetView<ComicDetailController> {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
                   onTap: () {
-                    _navigateToChapter(context, chapter.chapterId);
+                    _navigateToChapter(
+                        context, comic, chapter.chapterId, chapter.title);
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -354,8 +357,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
 
   Widget _buildReadButton(
     BuildContext context,
-    String chapterId,
-    // HistoryController historyController,
+    ComicDetail comic,
   ) {
     return Positioned(
       left: 30,
@@ -363,8 +365,8 @@ class ComicDetailView extends GetView<ComicDetailController> {
       bottom: 30,
       child: GestureDetector(
         onTap: () {
-          // _addToHistory(historyController, chapterId);
-          _navigateToChapter(context, chapterId);
+          _navigateToChapter(context, comic, comic.chapters.first.chapterId,
+              comic.chapters.first.title);
         },
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
@@ -386,8 +388,18 @@ class ComicDetailView extends GetView<ComicDetailController> {
     );
   }
 
-  void _navigateToChapter(BuildContext context, String chapterId) {
-    print('chapter id: $chapterId');
+  void _navigateToChapter(BuildContext context, ComicDetail comic,
+      String chapterId, String chapterTitle) {
+    HistoryItem historyItem = HistoryItem(
+      comicId: comic.comicId,
+      chapterId: chapterId,
+      chapterTitle: chapterTitle,
+      coverImage: comic.coverImage,
+      title: comic.title,
+      lastRead: DateTime.now(),
+      type: comic.type,
+    );
+    Get.put(HistoryController()).addHistory(historyItem);
     Get.toNamed(Routes.CHAPTER, arguments: {'chapterId': chapterId});
   }
 }

@@ -8,6 +8,8 @@ import '../modules/genre/bindings/genre_binding.dart';
 import '../modules/genre/views/genre_view.dart';
 import '../modules/genre_detail/bindings/genre_detail_binding.dart';
 import '../modules/genre_detail/views/genre_detail_view.dart';
+import '../modules/history/bindings/history_binding.dart';
+import '../modules/history/views/history_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
@@ -24,7 +26,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL =  Routes.MAIN;
+  static const INITIAL = Routes.MAIN;
 
   static final routes = [
     GetPage(
@@ -71,6 +73,11 @@ class AppPages {
       name: _Paths.LOGIN,
       page: () => const LoginView(),
       binding: LoginBinding(),
+    ),
+    GetPage(
+      name: _Paths.HISTORY,
+      page: () => const HistoryView(),
+      binding: HistoryBinding(),
     ),
   ];
 }
