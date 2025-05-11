@@ -9,7 +9,7 @@ class LoginController extends GetxController {
     try {
       final user = await firebaseService.signInWithGoogle();
       if (user != null) {
-        Get.offAllNamed(Routes.HOME);
+        Get.offAllNamed(Routes.MAIN);
       } else {
         Get.snackbar('Error', 'Login gagal');
       }

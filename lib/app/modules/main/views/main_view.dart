@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:komikaze/app/modules/home/views/home_view.dart';
+import 'package:komikaze/app/modules/profile/views/profile_view.dart';
 
 import '../controllers/main_controller.dart';
 
@@ -18,7 +19,7 @@ class MainView extends GetView<MainController> {
             HomeView(),
             HomeView(),
             HomeView(),
-            HomeView(),
+            ProfileView(),
           ],
         ),
       ),
