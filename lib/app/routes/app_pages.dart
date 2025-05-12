@@ -4,6 +4,8 @@ import '../modules/chapter/bindings/chapter_binding.dart';
 import '../modules/chapter/views/chapter_view.dart';
 import '../modules/comic_detail/bindings/comic_detail_binding.dart';
 import '../modules/comic_detail/views/comic_detail_view.dart';
+import '../modules/download/bindings/download_binding.dart';
+import '../modules/download/views/download_view.dart';
 import '../modules/genre/bindings/genre_binding.dart';
 import '../modules/genre/views/genre_view.dart';
 import '../modules/genre_detail/bindings/genre_detail_binding.dart';
@@ -58,6 +60,11 @@ class AppPages {
       name: _Paths.MAIN,
       page: () => const MainView(),
       binding: MainBinding(),
+    ),
+    GetPage(
+      name: _Paths.DOWNLOAD,
+      page: () => const DownloadsView(),
+      binding: DownloadBinding(),
     ),
     GetPage(
       name: _Paths.SEARCH,

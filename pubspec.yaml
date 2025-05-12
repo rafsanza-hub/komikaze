@@ -19,7 +19,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.6.0
+  sdk: '>=3.2.3 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,19 +30,24 @@ environment:
 dependencies:
   cached_network_image: ^3.4.1
   cloud_firestore: ^5.6.7
-  cupertino_icons: ^1.0.8
+  cupertino_icons: ^1.0.2
+  device_info_plus: ^9.1.2
+  dio: ^5.4.1
   firebase_auth: ^5.5.3
   firebase_core: ^3.13.0
   flutter:
     sdk: flutter
-  get: ^4.7.2
+  get: 4.6.6
+  get_storage: ^2.1.1
   google_sign_in: ^6.3.0
   http: ^1.4.0
   iconsax_flutter: ^1.0.0
+  path_provider: ^2.1.2
+  permission_handler: ^11.3.0
   readmore: ^3.0.0
 
 dev_dependencies:
-  flutter_lints: ^5.0.0
+  flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
 

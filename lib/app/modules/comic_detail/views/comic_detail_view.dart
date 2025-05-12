@@ -22,25 +22,14 @@ class ComicDetailView extends GetView<ComicDetailController> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        // if (controller.errorMessage.value.isNotEmpty) {
-        //   return Center(child: Text(controller.errorMessage.value));
-        // }
-
         final comic = controller.comicDetailData.value.comicDetail;
-        return _buildContent(
-          context,
-          comic,
-          controller,
-        );
+        return _buildContent(context, comic, controller);
       }),
     );
   }
 
-  Widget _buildContent(
-    BuildContext context,
-    ComicDetail comic,
-    ComicDetailController controller,
-  ) {
+  Widget _buildContent(BuildContext context, ComicDetail comic,
+      ComicDetailController controller) {
     return Stack(
       children: [
         SingleChildScrollView(
@@ -69,10 +58,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
           ),
         ),
         _buildCloseButton(context),
-        _buildReadButton(
-          context,
-          comic,
-        ),
+        _buildReadButton(context, comic),
       ],
     );
   }
@@ -226,10 +212,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
   }
 
   Widget _buildChaptersList(
-    BuildContext context,
-    ComicDetail comic,
-    List<Chapter> chapters,
-  ) {
+      BuildContext context, ComicDetail comic, List<Chapter> chapters) {
     final TextEditingController searchController = TextEditingController();
 
     return Column(
@@ -244,7 +227,6 @@ class ComicDetailView extends GetView<ComicDetailController> {
           ),
         ),
         const SizedBox(height: 10),
-        // Add search bar for chapters
         TextField(
           controller: searchController,
           style: const TextStyle(color: Colors.white),
@@ -253,7 +235,6 @@ class ComicDetailView extends GetView<ComicDetailController> {
             hintStyle: TextStyle(color: Colors.white54),
             border: InputBorder.none,
             icon: Icon(Icons.search, color: Colors.white54),
-            // fillColor: kSearchbarColor,
           ),
           onChanged: (value) {
             controller.filterChapters(value);
@@ -269,15 +250,13 @@ class ComicDetailView extends GetView<ComicDetailController> {
             padding: EdgeInsets.zero,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            separatorBuilder: (context, index) => const SizedBox(
-              height: 8,
-            ),
+            separatorBuilder: (context, index) => const SizedBox(height: 8),
             itemCount: filteredChapters.length,
             itemBuilder: (context, index) {
               final chapter = filteredChapters[index];
               return Card(
                 margin: EdgeInsets.zero,
-                elevation: 0, // Remove shadow
+                elevation: 0,
                 color: kSearchbarColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -318,6 +297,32 @@ class ComicDetailView extends GetView<ComicDetailController> {
                             ],
                           ),
                         ),
+                        Obx(() {
+                          final progress =
+                              controller.downloadingChapters[chapter.chapterId];
+                          if (progress != null) {
+                            return CircularProgressIndicator(value: progress);
+                          }
+                          return IconButton(
+                            icon: Icon(
+                              controller.isChapterDownloaded(chapter.chapterId)
+                                  ? Icons.download_done
+                                  : Icons.download,
+                              color: Colors.white54,
+                            ),
+                            onPressed: () {
+                              if (!controller
+                                  .isChapterDownloaded(chapter.chapterId)) {
+                                controller.downloadChapter(
+                                  chapter,
+                                  comic.comicId,
+                                  comic.title,
+                                  comic.coverImage,
+                                );
+                              }
+                            },
+                          );
+                        }),
                         const Icon(
                           Icons.chevron_right_rounded,
                           color: Colors.white54,
@@ -355,10 +360,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
     );
   }
 
-  Widget _buildReadButton(
-    BuildContext context,
-    ComicDetail comic,
-  ) {
+  Widget _buildReadButton(BuildContext context, ComicDetail comic) {
     return Positioned(
       left: 30,
       right: 30,
@@ -400,7 +402,11 @@ class ComicDetailView extends GetView<ComicDetailController> {
       type: comic.type,
     );
     Get.put(HistoryController()).addHistory(historyItem);
-    Get.toNamed(Routes.CHAPTER, arguments: {'chapterId': chapterId});
+    Get.toNamed(Routes.CHAPTER, arguments: {
+      'chapterId': chapterId,
+      'comicId': comic.comicId,
+      'comicTitle': comic.title,
+    });
   }
 }
 

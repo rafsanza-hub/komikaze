@@ -2,27 +2,54 @@ import 'package:get/get.dart';
 import 'package:komikaze/app/data/models/chapter.dart';
 import 'package:komikaze/app/data/services/comic_service.dart';
 import 'package:komikaze/app/routes/app_pages.dart';
+import 'package:get_storage/get_storage.dart';
 
 class ChapterController extends GetxController {
   final ComicService _comicService = ComicService();
+  final GetStorage _storage = GetStorage();
 
   var chapterData = ChapterData(
     chapter: DataChapter(
-      chapterId: "",
+      chapterId: '',
       images: [],
-      previousChapter: "",
+      previousChapter: '',
       nextChapter: null,
       chapters: [],
     ),
-    source: "",
+    source: '',
   ).obs;
 
   var isLoading = false.obs;
+  var isOffline = false.obs;
+  var localImages = <String>[].obs;
 
   Future<void> fetchChapter(String chapterId) async {
     try {
       isLoading(true);
-      chapterData.value = await _comicService.fetchChapter(chapterId);
+      final downloadedChapters =
+          _storage.read<List<dynamic>>('downloadedChapters') ?? [];
+      final downloadedChapter = downloadedChapters.firstWhereOrNull(
+        (json) => json['chapterId'] == chapterId,
+      );
+
+      if (downloadedChapter != null) {
+        isOffline.value = true;
+        localImages
+            .assignAll(List<String>.from(downloadedChapter['localImagePaths']));
+        chapterData.value = ChapterData(
+          chapter: DataChapter(
+            chapterId: chapterId,
+            images: localImages,
+            previousChapter: '',
+            nextChapter: null,
+            chapters: [],
+          ),
+          source: 'local',
+        );
+      } else {
+        isOffline.value = false;
+        chapterData.value = await _comicService.fetchChapter(chapterId);
+      }
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch chapter: $e');
     } finally {
@@ -32,17 +59,19 @@ class ChapterController extends GetxController {
 
   void navigateToChapter(String? chapterId) {
     if (chapterId != null && chapterId.isNotEmpty) {
-      Get.toNamed(Routes.CHAPTER, arguments: {'chapterId': chapterId});
+      Get.toNamed(Routes.CHAPTER, arguments: {
+        'chapterId': chapterId,
+        'comicId': Get.arguments['comicId'],
+        'comicTitle': Get.arguments['comicTitle'],
+      });
     }
   }
 
-  // In your ChapterController
   final showNavigation = true.obs;
   final showChapterList = false.obs;
 
   void toggleNavigationVisibility() {
     showNavigation.toggle();
-    // Hide chapter list when hiding navigation
     if (!showNavigation.value) {
       showChapterList.value = false;
     }
@@ -50,7 +79,6 @@ class ChapterController extends GetxController {
 
   void toggleChapterListVisibility() {
     showChapterList.toggle();
-    // Ensure navigation is visible when showing chapter list
     if (showChapterList.value) {
       showNavigation.value = true;
     }
