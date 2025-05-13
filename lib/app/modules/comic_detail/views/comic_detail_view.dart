@@ -49,8 +49,10 @@ class ComicDetailView extends GetView<ComicDetailController> {
                     const SizedBox(height: 10),
                     _buildInfoSection(comic),
                     const SizedBox(height: 10),
+                    _buildChapterNavigationButtons(context, comic),
+                    const SizedBox(height: 10),
                     _buildChaptersList(context, comic, comic.chapters),
-                    const SizedBox(height: 100),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -58,7 +60,6 @@ class ComicDetailView extends GetView<ComicDetailController> {
           ),
         ),
         _buildCloseButton(context),
-        _buildReadButton(context, comic),
       ],
     );
   }
@@ -186,12 +187,12 @@ class ComicDetailView extends GetView<ComicDetailController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildInfoItem('Author', comic.author),
-        _buildInfoItem('Released', comic.releaseYear),
-        _buildInfoItem('Status', comic.status),
-        _buildInfoItem('Type', comic.type),
-        _buildInfoItem('Rating', comic.rating),
-        _buildInfoItem('Updated', comic.updatedOn),
+        _buildInfoItem('author'.tr, comic.author),
+        _buildInfoItem('released'.tr, comic.releaseYear),
+        _buildInfoItem('status'.tr, comic.status),
+        _buildInfoItem('type'.tr, comic.type),
+        _buildInfoItem('rating'.tr, comic.rating),
+        _buildInfoItem('updated'.tr, comic.updatedOn),
       ],
     );
   }
@@ -218,9 +219,9 @@ class ComicDetailView extends GetView<ComicDetailController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Chapters',
-          style: TextStyle(
+        Text(
+          'chapters'.tr,
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -230,11 +231,11 @@ class ComicDetailView extends GetView<ComicDetailController> {
         TextField(
           controller: searchController,
           style: const TextStyle(color: Colors.white),
-          decoration: const InputDecoration(
-            hintText: 'Search chapters...',
-            hintStyle: TextStyle(color: Colors.white54),
+          decoration: InputDecoration(
+            hintText: 'search_chapters'.tr,
+            hintStyle: const TextStyle(color: Colors.white54),
             border: InputBorder.none,
-            icon: Icon(Icons.search, color: Colors.white54),
+            icon: const Icon(Icons.search, color: Colors.white54),
           ),
           onChanged: (value) {
             controller.filterChapters(value);
@@ -339,6 +340,74 @@ class ComicDetailView extends GetView<ComicDetailController> {
     );
   }
 
+  Widget _buildChapterNavigationButtons(
+      BuildContext context, ComicDetail comic) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: kButtonColor,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            onPressed: () {
+              if (comic.chapters.isNotEmpty) {
+                _navigateToChapter(
+                  context,
+                  comic,
+                  comic.chapters.last.chapterId,
+                  comic.chapters.last.title,
+                );
+              }
+            },
+            child: Text(
+              "first_chapter".tr,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: kButtonColor,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            onPressed: () {
+              if (comic.chapters.isNotEmpty) {
+                _navigateToChapter(
+                  context,
+                  comic,
+                  comic.chapters.first.chapterId,
+                  comic.chapters.first.title,
+                );
+              }
+            },
+            child: Text(
+              "last_chapter".tr,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildCloseButton(BuildContext context) {
     return Positioned(
       top: 60,
@@ -354,36 +423,6 @@ class ComicDetailView extends GetView<ComicDetailController> {
             Icons.close_rounded,
             color: Colors.white,
             size: 20,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildReadButton(BuildContext context, ComicDetail comic) {
-    return Positioned(
-      left: 30,
-      right: 30,
-      bottom: 30,
-      child: GestureDetector(
-        onTap: () {
-          _navigateToChapter(context, comic, comic.chapters.first.chapterId,
-              comic.chapters.first.title);
-        },
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Container(
-            color: kButtonColor,
-            alignment: Alignment.center,
-            height: 68,
-            child: const Text(
-              "Read Now",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
           ),
         ),
       ),

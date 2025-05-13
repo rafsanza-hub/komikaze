@@ -13,7 +13,7 @@ class HistoryView extends GetView<HistoryController> {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
-        title: const Text('Reading History'),
+        title: Text('history_title'.tr),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,

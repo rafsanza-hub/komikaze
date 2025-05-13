@@ -12,7 +12,7 @@ class ProfileView extends GetView<ProfileController> {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text('profile'.tr),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -104,8 +104,8 @@ class ProfileView extends GetView<ProfileController> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStatItem('18', 'Downloads'),
           _buildStatItem('24', 'Following'),
+          _buildStatItem('18', 'Followers'),
           _buildStatItem('Gold', 'Membership'),
         ],
       ),

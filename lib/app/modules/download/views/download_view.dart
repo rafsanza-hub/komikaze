@@ -17,9 +17,9 @@ class DownloadView extends GetView<DownloadController> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          'Downloads',
-          style: TextStyle(
+        title: Text(
+          'downloads'.tr,
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -38,14 +38,14 @@ class DownloadView extends GetView<DownloadController> {
                   size: 100,
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'No downloaded chapters',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                Text(
+                  'no_downloaded_chapters'.tr,
+                  style: const TextStyle(color: Colors.white, fontSize: 18),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Download chapters from Comic Detail to read offline',
-                  style: TextStyle(color: Colors.white54, fontSize: 14),
+                Text(
+                  'download_instruction'.tr,
+                  style: const TextStyle(color: Colors.white54, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
@@ -55,8 +55,8 @@ class DownloadView extends GetView<DownloadController> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12)),
                   ),
-                  onPressed: () => Get.toNamed(Routes.HOME),
-                  child: const Text('Browse Comics'),
+                  onPressed: () => Get.toNamed(Routes.MAIN),
+                  child: Text('browse_comics'.tr),
                 ),
               ],
             ),
@@ -103,17 +103,17 @@ class DownloadView extends GetView<DownloadController> {
                     Get.defaultDialog(
                       title: 'Delete Chapter',
                       content: Text(
-                          'Are you sure you want to delete ${chapter.chapterTitle}?'),
+                          'confirm_delete'.tr + '${chapter.chapterTitle}?'),
                       confirm: TextButton(
                         onPressed: () {
                           controller.deleteChapter(chapter);
                           Get.back();
                         },
-                        child: const Text('Delete'),
+                        child: Text('delete'.tr),
                       ),
                       cancel: TextButton(
                         onPressed: () => Get.back(),
-                        child: const Text('Cancel'),
+                        child: Text('cancel'.tr),
                       ),
                     );
                   },

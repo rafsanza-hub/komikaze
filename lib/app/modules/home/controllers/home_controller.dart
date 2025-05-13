@@ -18,21 +18,21 @@ class HomeController extends GetxController {
     {
       "comicId": "omniscient-readers-viewpoint",
       "title": "OMNISCIENT READER'S VIEWPOINT",
-      "subtitle": "TOP FANTASY MANHWA",
+      "subtitle": "top_fantasy_manhwa".tr,
       "image":
           "https://i.pinimg.com/736x/84/5f/9d/845f9dab7240d5f249efc289dde4d7af.jpg",
     },
     {
       "comicId": "solo-leveling",
       "title": "SOLO LEVELING",
-      "subtitle": "TOP ACTION MANHWA",
+      "subtitle": "top_action_manhwa".tr,
       "image":
           "https://i.pinimg.com/736x/12/76/3d/12763d6cc85d5c00e20dd20052187138.jpg",
     },
     {
       "comicId": "legend-of-the-northern-blade",
       "title": "LEGEND OF THE NORTHERN BLADE",
-      "subtitle": "TOP MURIM MANHWA",
+      "subtitle": "top_murim_manhwa".tr,
       "image":
           "https://i.pinimg.com/736x/af/5a/0d/af5a0d7373b41b607e0588f34ae1d5c7.jpg",
     }

@@ -35,15 +35,16 @@ class MainView extends GetView<MainController> {
               type: BottomNavigationBarType.fixed,
               // showSelectedLabels: false,
               // showUnselectedLabels: false,
-              items: const [
+              items: [
                 BottomNavigationBarItem(
-                    icon: Icon(Iconsax.home_2_copy), label: 'Home'),
+                    icon: const Icon(Iconsax.home_2_copy), label: 'home'.tr),
                 BottomNavigationBarItem(
-                    icon: Icon(Iconsax.import_1_copy), label: 'Download'),
+                    icon: const Icon(Iconsax.import_1_copy),
+                    label: 'downloads'.tr),
                 BottomNavigationBarItem(
-                    icon: Icon(Iconsax.clock_copy), label: 'History'),
+                    icon: const Icon(Iconsax.clock_copy), label: 'history'.tr),
                 BottomNavigationBarItem(
-                    icon: Icon(Iconsax.user_copy), label: 'Profile'),
+                    icon: const Icon(Iconsax.user_copy), label: 'profile'.tr),
               ],
             ),
           )),

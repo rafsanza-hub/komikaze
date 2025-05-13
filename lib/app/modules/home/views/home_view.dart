@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
+import 'package:komikaze/app/modules/history/controllers/history_controller.dart';
 import 'package:komikaze/app/modules/home/controllers/home_controller.dart';
 import 'package:komikaze/app/routes/app_pages.dart';
 import 'package:komikaze/app/widgets/custom_card_normal.dart';
@@ -106,7 +107,7 @@ class HomeView extends GetView<HomeController> {
                         child: Column(
                           children: [
                             Text(
-                              comic['subtitle']!,
+                              comic['subtitle']!.toUpperCase(),
                               style: const TextStyle(
                                 color: Colors.white70,
                                 fontSize: 13,
@@ -180,33 +181,32 @@ class KomikCardsSection extends GetView<HomeController> {
             child: Text('No comics available',
                 style: TextStyle(color: Colors.white)));
       }
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHistorySection(context),
-          _buildSectionTitle(context, "Top 10 Popular"),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: _buildPopularGrid(context),
-          ),
-          _buildSectionTitle(context, "Genre pilihan"),
-          _buildGenreChips(context),
-          _buildSectionTitle(context, "Terbaru"),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: _buildTerbaruGrid(context),
-          ),
-          _buildSectionTitle(context, "Completed"),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: _buildKomikGrid(context),
-          ),
-        ],
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHistorySection(context),
+            _buildSectionTitle(context, "top_10_popular".tr),
+            const SizedBox(height: 8),
+            _buildPopularGrid(context),
+            const SizedBox(height: 5),
+            _buildSectionTitle(context, "genre_selection".tr),
+            const SizedBox(height: 8),
+            _buildGenreChips(context),
+            const SizedBox(height: 5),
+            _buildSectionTitle(context, "latest".tr),
+            const SizedBox(height: 8),
+            _buildTerbaruGrid(context),
+            const SizedBox(height: 5),
+          ],
+        ),
       );
     });
   }
 
   Widget _buildHistorySection(BuildContext context) {
+    final history = Get.find<HistoryController>().histories.first;
     final lastComic = controller.comicData.value.comicsList.isNotEmpty
         ? controller.comicData.value.comicsList[0]
         : null;
@@ -214,88 +214,80 @@ class KomikCardsSection extends GetView<HomeController> {
     return Container(
       height: 140,
       margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            image: DecorationImage(
+              image: CachedNetworkImageProvider(
+                history.coverImage,
+              ),
+              fit: BoxFit.cover,
+            )),
         child: Container(
-          width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            image: lastComic != null
-                ? const DecorationImage(
-                    image: CachedNetworkImageProvider(
-                        "https://i.pinimg.com/736x/84/5f/9d/845f9dab7240d5f249efc289dde4d7af.jpg"),
-                    fit: BoxFit.cover,
-                  )
-                : null,
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.black.withOpacity(0.3),
-                  Colors.black.withOpacity(0.7),
-                ],
-              ),
-            ),
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                const Text(
-                  "Terakhir dilihat",
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  lastComic?.title ?? "No history",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                TextButton.icon(
-                  onPressed: () {
-                    if (lastComic != null) {
-                      Get.toNamed(Routes.COMIC_DETAIL,
-                          arguments: lastComic.comicId);
-                    }
-                  },
-                  icon: const Icon(
-                    Icons.play_circle_outline,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                  label: const Text(
-                    'Lanjutkan',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                    ),
-                  ),
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.black26,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.black.withOpacity(0.3),
+                Colors.black.withOpacity(0.7),
               ],
             ),
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                "last_read".tr,
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 12,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                history.title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 8),
+              TextButton.icon(
+                onPressed: () {
+                  Get.toNamed(Routes.COMIC_DETAIL, arguments: history.comicId);
+                },
+                icon: const Icon(
+                  Icons.play_circle_outline,
+                  color: Colors.white,
+                  size: 20,
+                ),
+                label: Text(
+                  'continue'.tr,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.black38,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -307,9 +299,8 @@ class KomikCardsSection extends GetView<HomeController> {
 
     return Container(
       height: 180,
-      margin: const EdgeInsets.symmetric(vertical: 10),
       child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.zero,
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         itemCount: popularComics.length,
@@ -334,18 +325,16 @@ class KomikCardsSection extends GetView<HomeController> {
   }
 
   Widget _buildTerbaruGrid(BuildContext context) {
-    final terbaruComics = controller.comicData.value.comicsList
-        .where((comic) => comic.status!.toLowerCase() == 'ongoing')
-        .toList();
-
+    final terbaruComics = controller.comicData.value.comicsList;
     return GridView.builder(
+      padding: EdgeInsets.zero,
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         childAspectRatio: 0.7,
         crossAxisSpacing: 8,
-        mainAxisSpacing: 12,
+        // mainAxisSpacing: 12,
       ),
       itemCount: terbaruComics.length,
       itemBuilder: (context, index) {
@@ -401,7 +390,6 @@ class KomikCardsSection extends GetView<HomeController> {
       height: 36,
       margin: const EdgeInsets.only(bottom: 8),
       child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         itemCount: genres.length,
@@ -431,37 +419,34 @@ class KomikCardsSection extends GetView<HomeController> {
   }
 
   Widget _buildSectionTitle(BuildContext context, String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
           ),
-          if (title == "Completed" ||
-              title == "Terbaru" ||
-              title == "Top 10 Popular")
-            GestureDetector(
-              onTap: () {
-                // Navigate to full list
-              },
-              child: const Text(
-                "See all",
-                style: TextStyle(
-                  color: kButtonColor,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w300,
-                ),
+        ),
+        if (title == "Completed" ||
+            title == "Terbaru" ||
+            title == "Top 10 Popular")
+          GestureDetector(
+            onTap: () {
+              // Navigate to full list
+            },
+            child: const Text(
+              "See all",
+              style: TextStyle(
+                color: kButtonColor,
+                fontSize: 17,
+                fontWeight: FontWeight.w300,
               ),
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 }
