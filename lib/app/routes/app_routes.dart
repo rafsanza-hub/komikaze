@@ -28,5 +28,5 @@ abstract class _Paths {
   static const PROFILE = '/profile';
   static const LOGIN = '/login';
   static const HISTORY = '/history';
-  static const DOWNLOAD = '/downloads';
+  static const DOWNLOAD = '/download';
 }

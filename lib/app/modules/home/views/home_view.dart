@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:komikaze/app/modules/home/controllers/home_controller.dart';
 import 'package:komikaze/app/routes/app_pages.dart';
 import 'package:komikaze/app/widgets/custom_card_normal.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 const kBackgroundColor = Color(0xff121012);
 const kButtonColor = Color.fromARGB(255, 89, 54, 133);
@@ -16,44 +17,150 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: SingleChildScrollView(
+        // physics: const BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            _buildHeroImage(context),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       const Text(
+            //         "Hi, Rafsan",
+            //         style: TextStyle(
+            //           color: Colors.white,
+            //           fontSize: 30,
+            //           fontWeight: FontWeight.bold,
+            //         ),
+            //       ),
+            //       IconButton(
+            //         icon: const Icon(
+            //           Icons.search_rounded,
+            //           color: Colors.white,
+            //           size: 30,
+            //         ),
+            //         onPressed: () {
+            //           Get.toNamed(Routes.SEARCH);
+            //         },
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            const SizedBox(height: 20),
+            const KomikCardsSection(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeroImage(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          height: 390,
+          child: PageView.builder(
+            controller: controller.pageController,
+            itemCount: controller.heroComics.length,
+            onPageChanged: (value) => controller.currentPage.value = value,
+            itemBuilder: (context, index) {
+              final comic = controller.heroComics[index];
+              return SizedBox(
+                width: double.infinity,
+                height: 390,
+                child: Stack(
                   children: [
-                    const Text(
-                      "Hi, Rafsan",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
+                    Positioned.fill(
+                      child: CachedNetworkImage(
+                        imageUrl: comic['image']!,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.topCenter,
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.search_rounded,
-                        color: Colors.white,
-                        size: 30,
+                    Positioned.fill(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.transparent,
+                              kBackgroundColor.withOpacity(0.8),
+                              kBackgroundColor,
+                            ],
+                            stops: const [0.0, 0.4, 0.75, 1.0],
+                          ),
+                        ),
                       ),
-                      onPressed: () {
-                        Get.toNamed(Routes.SEARCH);
-                      },
+                    ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: Column(
+                          children: [
+                            Text(
+                              comic['subtitle']!,
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 0),
+                            Text(
+                              comic['title']!,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            SizedBox(
+                              width: 200,
+                              child: OutlinedButton(
+                                onPressed: () => Get.toNamed(
+                                    Routes.COMIC_DETAIL,
+                                    arguments: comic['comicId']),
+                                style: OutlinedButton.styleFrom(),
+                                child: const Text(
+                                  'Read Now',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 20),
-              const KomikCardsSection(),
-            ],
+              );
+            },
           ),
         ),
-      ),
+        const SizedBox(height: 25),
+        SmoothPageIndicator(
+          controller: controller.pageController,
+          count: controller.heroComics.length,
+          effect: SlideEffect(
+              spacing: 8.0,
+              radius: 30,
+              dotWidth: 6,
+              dotHeight: 6,
+              paintStyle: PaintingStyle.fill,
+              strokeWidth: 1.5,
+              dotColor: Colors.grey.shade800,
+              activeDotColor: Colors.grey),
+        ),
+      ],
     );
   }
 }
@@ -114,8 +221,9 @@ class KomikCardsSection extends GetView<HomeController> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             image: lastComic != null
-                ? DecorationImage(
-                    image: CachedNetworkImageProvider(lastComic.image),
+                ? const DecorationImage(
+                    image: CachedNetworkImageProvider(
+                        "https://i.pinimg.com/736x/84/5f/9d/845f9dab7240d5f249efc289dde4d7af.jpg"),
                     fit: BoxFit.cover,
                   )
                 : null,
@@ -201,22 +309,21 @@ class KomikCardsSection extends GetView<HomeController> {
       height: 180,
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         itemCount: popularComics.length,
         itemBuilder: (context, index) {
           final comic = popularComics[index];
           return Container(
-            width: (MediaQuery.of(context).size.width - 48) / 3,
-            margin: const EdgeInsets.only(right: 8),
+            margin: const EdgeInsets.only(right: 5),
             child: GestureDetector(
               onTap: () {
                 Get.toNamed(Routes.COMIC_DETAIL, arguments: comic.comicId);
               },
               child: CustomCardNormal(
                 title: comic.title,
-                episodeCount: 'Rank ${comic.rank}',
+                chapter: 'Rank ${comic.rank}',
                 imageUrl: comic.image,
               ),
             ),
@@ -249,8 +356,9 @@ class KomikCardsSection extends GetView<HomeController> {
           },
           child: CustomCardNormal(
             title: comic.title,
-            episodeCount: comic.chapter,
+            chapter: comic.chapter,
             imageUrl: comic.image,
+            type: comic.type,
           ),
         );
       },
@@ -267,9 +375,6 @@ class KomikCardsSection extends GetView<HomeController> {
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        childAspectRatio: 0.7,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 12,
       ),
       itemCount: completedComics.length,
       itemBuilder: (context, index) {
@@ -280,8 +385,9 @@ class KomikCardsSection extends GetView<HomeController> {
           },
           child: CustomCardNormal(
             title: comic.title,
-            episodeCount: comic.chapter,
+            chapter: comic.chapter,
             imageUrl: comic.image,
+            type: comic.type,
           ),
         );
       },

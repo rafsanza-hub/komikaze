@@ -7,7 +7,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:komikaze/app/core/theme/theme.dart';
 import 'package:komikaze/app/modules/home/views/home_view.dart';
 
 void main() {

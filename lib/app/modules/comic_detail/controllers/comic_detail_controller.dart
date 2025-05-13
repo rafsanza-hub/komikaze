@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:komikaze/app/data/models/comic_detail.dart';
-import 'package:komikaze/app/data/models/chapter.dart';
 import 'package:komikaze/app/data/models/downloaded_chapter.dart';
 import 'package:komikaze/app/data/services/comic_service.dart';
 import 'package:path_provider/path_provider.dart';

@@ -35,7 +35,7 @@ class ProfileView extends GetView<ProfileController> {
 
                 // Stats Section
                 _buildStatsSection(),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton(

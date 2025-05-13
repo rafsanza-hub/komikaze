@@ -96,7 +96,9 @@ class ChapterView extends GetView<ChapterController> {
                         : Colors.grey,
                     onPressed: () {
                       if (chapter.previousChapter.isEmpty ||
-                          controller.isOffline.value) return;
+                          controller.isOffline.value) {
+                        return;
+                      }
                       final previousChapter =
                           chapter.previousChapter.split('/').elementAt(4);
                       Get.toNamed(Routes.CHAPTER, arguments: {
@@ -128,7 +130,9 @@ class ChapterView extends GetView<ChapterController> {
                         : Colors.grey,
                     onPressed: () {
                       if (chapter.nextChapter == null ||
-                          controller.isOffline.value) return;
+                          controller.isOffline.value) {
+                        return;
+                      }
                       final nextChapter =
                           chapter.nextChapter!.split('/').elementAt(4);
                       Get.toNamed(Routes.CHAPTER, arguments: {

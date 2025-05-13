@@ -7,8 +7,8 @@ import 'package:get_storage/get_storage.dart';
 const kBackgroundColor = Color(0xff121012);
 const kSearchbarColor = Color(0xff382C3E);
 
-class DownloadsView extends GetView<DownloadsController> {
-  const DownloadsView({super.key});
+class DownloadView extends GetView<DownloadController> {
+  const DownloadView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -138,8 +138,8 @@ class DownloadsView extends GetView<DownloadsController> {
           print(
               'Current downloadedChapters: ${controller.downloadedChapters.map((c) => c.toJson())}');
         },
-        child: const Icon(Icons.bug_report),
         backgroundColor: const Color.fromARGB(255, 89, 54, 133),
+        child: const Icon(Icons.bug_report),
       ),
     );
   }

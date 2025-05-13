@@ -63,5 +63,6 @@ class FirebaseService {
       print(e);
       throw Exception('Error getting history: $e');
     }
+    return null;
   }
 }

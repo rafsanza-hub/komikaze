@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:komikaze/app/data/models/comic.dart';
 import 'package:komikaze/app/data/models/popular_comic.dart';
@@ -7,6 +10,33 @@ import 'package:komikaze/app/modules/genre/controllers/genre_controller.dart';
 class HomeController extends GetxController {
   final ComicService _comicService = ComicService();
   final GenreController genreController = Get.find();
+  PageController pageController = PageController(initialPage: 0);
+  Timer? _timer;
+  final currentPage = 0.obs;
+
+  final heroComics = [
+    {
+      "comicId": "omniscient-readers-viewpoint",
+      "title": "OMNISCIENT READER'S VIEWPOINT",
+      "subtitle": "TOP FANTASY MANHWA",
+      "image":
+          "https://i.pinimg.com/736x/84/5f/9d/845f9dab7240d5f249efc289dde4d7af.jpg",
+    },
+    {
+      "comicId": "solo-leveling",
+      "title": "SOLO LEVELING",
+      "subtitle": "TOP ACTION MANHWA",
+      "image":
+          "https://i.pinimg.com/736x/12/76/3d/12763d6cc85d5c00e20dd20052187138.jpg",
+    },
+    {
+      "comicId": "legend-of-the-northern-blade",
+      "title": "LEGEND OF THE NORTHERN BLADE",
+      "subtitle": "TOP MURIM MANHWA",
+      "image":
+          "https://i.pinimg.com/736x/af/5a/0d/af5a0d7373b41b607e0588f34ae1d5c7.jpg",
+    }
+  ];
 
   var comicData = ComicData(
     comicsList: [],
@@ -44,6 +74,23 @@ class HomeController extends GetxController {
     }
   }
 
+  void _startAutoScroll() {
+    _timer = Timer.periodic(const Duration(seconds: 6), (timer) {
+      int nextPage = currentPage.value + 1;
+      if (nextPage >= heroComics.length) {
+        nextPage = 0;
+      }
+
+      pageController.animateToPage(
+        nextPage,
+        duration: const Duration(milliseconds: 1000),
+        curve: Curves.easeInOut,
+      );
+
+      currentPage.value = nextPage;
+    });
+  }
+
   @override
   void onInit() {
     genreController.fetchGenres();
@@ -51,5 +98,17 @@ class HomeController extends GetxController {
     fetchPopularComics();
     print('genre: ${genreController.genreData.value.genres}');
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    _startAutoScroll();
+  }
+
+  @override
+  void onClose() {
+    _timer?.cancel();
+    super.onClose();
   }
 }

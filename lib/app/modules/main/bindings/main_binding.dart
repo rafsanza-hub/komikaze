@@ -25,8 +25,8 @@ class MainBinding extends Bindings {
     Get.lazyPut<HistoryController>(
       () => HistoryController(),
     );
-    Get.lazyPut<DownloadsController>(
-      () => DownloadsController(),
+    Get.lazyPut<DownloadController>(
+      () => DownloadController(),
     );
   }
 }

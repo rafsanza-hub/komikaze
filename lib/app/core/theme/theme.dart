@@ -49,13 +49,11 @@ class AppTheme {
     useMaterial3: true,
     brightness: Brightness.light,
     primaryColor: _primaryColorLight,
-    colorScheme: ColorScheme.light(
+    colorScheme: const ColorScheme.light(
       primary: _primaryColorLight,
       onPrimary: Colors.white,
       secondary: _accentColorLight,
       onSecondary: Colors.white,
-      background: _backgroundLight,
-      onBackground: _textPrimaryLight,
       surface: _surfaceLight,
       onSurface: _textPrimaryLight,
       error: _errorLight,
@@ -65,7 +63,7 @@ class AppTheme {
     fontFamily: _fontFamily,
 
     // AppBar Theme
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: _primaryColorLight,
       foregroundColor: Colors.white,
       elevation: 0,
@@ -110,7 +108,7 @@ class AppTheme {
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: _primaryColorLight,
-        side: BorderSide(color: _primaryColorLight, width: 1.5),
+        side: const BorderSide(color: _primaryColorLight, width: 1.5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(_buttonRadius),
         ),
@@ -177,17 +175,17 @@ class AppTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_inputRadius),
-        borderSide: BorderSide(color: _primaryColorLight, width: 2),
+        borderSide: const BorderSide(color: _primaryColorLight, width: 2),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_inputRadius),
-        borderSide: BorderSide(color: _errorLight, width: 1),
+        borderSide: const BorderSide(color: _errorLight, width: 1),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_inputRadius),
-        borderSide: BorderSide(color: _errorLight, width: 2),
+        borderSide: const BorderSide(color: _errorLight, width: 2),
       ),
-      labelStyle: TextStyle(
+      labelStyle: const TextStyle(
         color: _textSecondaryLight,
         fontSize: 14,
         fontFamily: _fontFamily,
@@ -197,7 +195,7 @@ class AppTheme {
         fontSize: 14,
         fontFamily: _fontFamily,
       ),
-      errorStyle: TextStyle(
+      errorStyle: const TextStyle(
         color: _errorLight,
         fontSize: 12,
         fontFamily: _fontFamily,
@@ -206,8 +204,8 @@ class AppTheme {
 
     // CheckBox Theme
     checkboxTheme: CheckboxThemeData(
-      fillColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      fillColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return _primaryColorLight;
         }
         return null;
@@ -219,8 +217,8 @@ class AppTheme {
 
     // Radio Button Theme
     radioTheme: RadioThemeData(
-      fillColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      fillColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return _primaryColorLight;
         }
         return null;
@@ -229,14 +227,14 @@ class AppTheme {
 
     // Switch Theme
     switchTheme: SwitchThemeData(
-      thumbColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      thumbColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return _primaryColorLight;
         }
         return null;
       }),
-      trackColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      trackColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return _primaryColorLight.withOpacity(0.5);
         }
         return null;
@@ -244,18 +242,18 @@ class AppTheme {
     ),
 
     // Bottom Navigation Bar Theme
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: _backgroundLight,
       selectedItemColor: _primaryColorLight,
       unselectedItemColor: _textSecondaryLight,
       type: BottomNavigationBarType.fixed,
       elevation: 8,
-      selectedLabelStyle: const TextStyle(
+      selectedLabelStyle: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w500,
         fontFamily: _fontFamily,
       ),
-      unselectedLabelStyle: const TextStyle(
+      unselectedLabelStyle: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w500,
         fontFamily: _fontFamily,
@@ -263,16 +261,16 @@ class AppTheme {
     ),
 
     // TabBar Theme
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: const TabBarTheme(
       labelColor: _primaryColorLight,
       unselectedLabelColor: _textSecondaryLight,
       indicatorColor: _primaryColorLight,
-      labelStyle: const TextStyle(
+      labelStyle: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w600,
         fontFamily: _fontFamily,
       ),
-      unselectedLabelStyle: const TextStyle(
+      unselectedLabelStyle: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w400,
         fontFamily: _fontFamily,
@@ -293,13 +291,13 @@ class AppTheme {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(_borderRadius),
       ),
-      titleTextStyle: TextStyle(
+      titleTextStyle: const TextStyle(
         color: _textPrimaryLight,
         fontSize: 18,
         fontWeight: FontWeight.w600,
         fontFamily: _fontFamily,
       ),
-      contentTextStyle: TextStyle(
+      contentTextStyle: const TextStyle(
         color: _textPrimaryLight,
         fontSize: 16,
         fontFamily: _fontFamily,
@@ -313,7 +311,7 @@ class AppTheme {
       selectedColor: _primaryColorLight,
       secondarySelectedColor: _primaryColorLight.withOpacity(0.8),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      labelStyle: TextStyle(
+      labelStyle: const TextStyle(
         color: _textPrimaryLight,
         fontSize: 14,
         fontFamily: _fontFamily,
@@ -334,7 +332,7 @@ class AppTheme {
     ),
 
     // Text Theme
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       displayLarge: TextStyle(
         fontSize: 32,
         fontWeight: FontWeight.bold,
@@ -430,13 +428,11 @@ class AppTheme {
     useMaterial3: true,
     brightness: Brightness.dark,
     primaryColor: _primaryColorDark,
-    colorScheme: ColorScheme.dark(
+    colorScheme: const ColorScheme.dark(
       primary: _primaryColorDark,
       onPrimary: Colors.black,
       secondary: _accentColorDark,
       onSecondary: Colors.black,
-      background: _backgroundDark,
-      onBackground: _textPrimaryDark,
       surface: _surfaceDark,
       onSurface: _textPrimaryDark,
       error: _errorDark,
@@ -446,7 +442,7 @@ class AppTheme {
     fontFamily: _fontFamily,
 
     // AppBar Theme
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: _surfaceDark,
       foregroundColor: _textPrimaryDark,
       elevation: 0,
@@ -491,7 +487,7 @@ class AppTheme {
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: _primaryColorDark,
-        side: BorderSide(color: _primaryColorDark, width: 1.5),
+        side: const BorderSide(color: _primaryColorDark, width: 1.5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(_buttonRadius),
         ),
@@ -558,17 +554,17 @@ class AppTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_inputRadius),
-        borderSide: BorderSide(color: _primaryColorDark, width: 2),
+        borderSide: const BorderSide(color: _primaryColorDark, width: 2),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_inputRadius),
-        borderSide: BorderSide(color: _errorDark, width: 1),
+        borderSide: const BorderSide(color: _errorDark, width: 1),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_inputRadius),
-        borderSide: BorderSide(color: _errorDark, width: 2),
+        borderSide: const BorderSide(color: _errorDark, width: 2),
       ),
-      labelStyle: TextStyle(
+      labelStyle: const TextStyle(
         color: _textSecondaryDark,
         fontSize: 14,
         fontFamily: _fontFamily,
@@ -578,7 +574,7 @@ class AppTheme {
         fontSize: 14,
         fontFamily: _fontFamily,
       ),
-      errorStyle: TextStyle(
+      errorStyle: const TextStyle(
         color: _errorDark,
         fontSize: 12,
         fontFamily: _fontFamily,
@@ -587,8 +583,8 @@ class AppTheme {
 
     // CheckBox Theme
     checkboxTheme: CheckboxThemeData(
-      fillColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      fillColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return _primaryColorDark;
         }
         return null;
@@ -600,8 +596,8 @@ class AppTheme {
 
     // Radio Button Theme
     radioTheme: RadioThemeData(
-      fillColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      fillColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return _primaryColorDark;
         }
         return null;
@@ -610,14 +606,14 @@ class AppTheme {
 
     // Switch Theme
     switchTheme: SwitchThemeData(
-      thumbColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      thumbColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return _primaryColorDark;
         }
         return null;
       }),
-      trackColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      trackColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return _primaryColorDark.withOpacity(0.5);
         }
         return null;
@@ -625,18 +621,18 @@ class AppTheme {
     ),
 
     // Bottom Navigation Bar Theme
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: _surfaceDark,
       selectedItemColor: _primaryColorDark,
       unselectedItemColor: _textSecondaryDark,
       type: BottomNavigationBarType.fixed,
       elevation: 8,
-      selectedLabelStyle: const TextStyle(
+      selectedLabelStyle: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w500,
         fontFamily: _fontFamily,
       ),
-      unselectedLabelStyle: const TextStyle(
+      unselectedLabelStyle: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w500,
         fontFamily: _fontFamily,
@@ -644,16 +640,16 @@ class AppTheme {
     ),
 
     // TabBar Theme
-    tabBarTheme: TabBarTheme(
+    tabBarTheme: const TabBarTheme(
       labelColor: _primaryColorDark,
       unselectedLabelColor: _textSecondaryDark,
       indicatorColor: _primaryColorDark,
-      labelStyle: const TextStyle(
+      labelStyle: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w600,
         fontFamily: _fontFamily,
       ),
-      unselectedLabelStyle: const TextStyle(
+      unselectedLabelStyle: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w400,
         fontFamily: _fontFamily,
@@ -674,13 +670,13 @@ class AppTheme {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(_borderRadius),
       ),
-      titleTextStyle: TextStyle(
+      titleTextStyle: const TextStyle(
         color: _textPrimaryDark,
         fontSize: 18,
         fontWeight: FontWeight.w600,
         fontFamily: _fontFamily,
       ),
-      contentTextStyle: TextStyle(
+      contentTextStyle: const TextStyle(
         color: _textPrimaryDark,
         fontSize: 16,
         fontFamily: _fontFamily,
@@ -694,7 +690,7 @@ class AppTheme {
       selectedColor: _primaryColorDark,
       secondarySelectedColor: _primaryColorDark.withOpacity(0.8),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      labelStyle: TextStyle(
+      labelStyle: const TextStyle(
         color: _textPrimaryDark,
         fontSize: 14,
         fontFamily: _fontFamily,
@@ -715,7 +711,7 @@ class AppTheme {
     ),
 
     // Text Theme
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       displayLarge: TextStyle(
         fontSize: 32,
         fontWeight: FontWeight.bold,

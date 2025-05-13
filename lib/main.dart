@@ -18,9 +18,7 @@ void main() async {
   runApp(
     GetMaterialApp(
       title: "Application",
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.dark,
+      theme: AppTheme.darkTheme,
       initialRoute: user == null ? Routes.LOGIN : Routes.MAIN,
       getPages: AppPages.routes,
     ),

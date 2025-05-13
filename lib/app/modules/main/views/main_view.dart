@@ -19,7 +19,7 @@ class MainView extends GetView<MainController> {
           index: controller.index.value,
           children: const [
             HomeView(),
-            DownloadsView(),
+            DownloadView(),
             HistoryView(),
             ProfileView(),
           ],
@@ -39,7 +39,7 @@ class MainView extends GetView<MainController> {
                 BottomNavigationBarItem(
                     icon: Icon(Iconsax.home_2_copy), label: 'Home'),
                 BottomNavigationBarItem(
-                    icon: Icon(Iconsax.search_normal_1_copy), label: 'Search'),
+                    icon: Icon(Iconsax.import_1_copy), label: 'Download'),
                 BottomNavigationBarItem(
                     icon: Icon(Iconsax.clock_copy), label: 'History'),
                 BottomNavigationBarItem(

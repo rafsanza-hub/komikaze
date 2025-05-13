@@ -65,7 +65,7 @@ class SearchView extends GetView<search_controller.SearchController> {
               },
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
@@ -107,8 +107,9 @@ class SearchView extends GetView<search_controller.SearchController> {
                       },
                       child: CustomCardNormal(
                         title: comic.title,
-                        episodeCount: comic.chapter,
+                        chapter: comic.chapter,
                         imageUrl: comic.image,
+                        type: comic.type,
                       ),
                     );
                   },

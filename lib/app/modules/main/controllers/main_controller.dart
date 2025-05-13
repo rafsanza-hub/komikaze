@@ -13,10 +13,10 @@ class MainController extends GetxController {
   }
 
   List<dynamic> pages = [
-    HomeView(),
-    GenreView(),
-    HistoryView(),
-    DownloadsView(),
-    ProfileView(),
+    const HomeView(),
+    const GenreView(),
+    const HistoryView(),
+    const DownloadView(),
+    const ProfileView(),
   ];
 }

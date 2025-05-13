@@ -5,7 +5,7 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
-class DownloadsController extends GetxController {
+class DownloadController extends GetxController {
   final GetStorage _storage = GetStorage();
   var downloadedChapters = <DownloadedChapter>[].obs;
 

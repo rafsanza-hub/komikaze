@@ -76,7 +76,7 @@ class GenreDetailView extends GetView<GenreDetailController> {
                       },
                       child: CustomCardNormal(
                         title: comic.title,
-                        episodeCount: comic.chapter,
+                        chapter: comic.chapter,
                         imageUrl: comic.image,
                       ),
                     );

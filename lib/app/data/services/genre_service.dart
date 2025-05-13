@@ -17,7 +17,7 @@ class GenreService extends GetxService {
         throw Exception('Failed to fetch genres: ${response.statusCode}');
       }
     } catch (e) {
-      print('errorrr' + e.toString());
+      print('errorrr$e');
 
       throw Exception('Error fetching genres: $e');
     }
@@ -29,13 +29,13 @@ class GenreService extends GetxService {
           .get(Uri.parse('${AppConfig.baseUrl}/genres/$genre?page=$page'));
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-        print('genre rororo:' + jsonData['data'].toString());
+        print('genre rororo:${jsonData['data']}');
         return ComicData.fromJson(jsonData['data']);
       } else {
         throw Exception('Failed to fetch comics: ${response.statusCode}');
       }
     } catch (e) {
-      print('errorrr' + e.toString());
+      print('errorrr$e');
       throw Exception('Error fetching comics: $e');
     }
   }

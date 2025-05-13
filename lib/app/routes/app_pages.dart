@@ -33,7 +33,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: _Paths.HOME,
-      page: () => HomeView(),
+      page: () => const HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(
@@ -53,7 +53,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.GENRE_DETAIL,
-      page: () => GenreDetailView(),
+      page: () => const GenreDetailView(),
       binding: GenreDetailBinding(),
     ),
     GetPage(
@@ -63,7 +63,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.DOWNLOAD,
-      page: () => const DownloadsView(),
+      page: () => const DownloadView(),
       binding: DownloadBinding(),
     ),
     GetPage(

@@ -288,7 +288,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                '${chapter.releaseTime}',
+                                chapter.releaseTime,
                                 style: const TextStyle(
                                   color: Colors.white54,
                                   fontSize: 12,

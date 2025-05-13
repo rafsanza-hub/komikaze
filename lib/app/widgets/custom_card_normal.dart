@@ -3,33 +3,47 @@ import 'package:flutter/material.dart';
 
 class CustomCardNormal extends StatelessWidget {
   final String title;
-  final String episodeCount;
+  final String chapter;
   final String imageUrl;
+  final String? type;
 
   const CustomCardNormal({
     super.key,
     required this.title,
-    required this.episodeCount,
+    required this.chapter,
     required this.imageUrl,
+    this.type,
   });
+
+  String getFlagImage({type = 'manga'}) {
+    if (type == 'manga') {
+      return 'https://flagcdn.com/w20/jp.jpg';
+    } else if (type == 'manhwa') {
+      return 'https://flagcdn.com/w20/kr.jpg';
+    } else if (type == 'manhua') {
+      return 'https://flagcdn.com/w20/cn.jpg';
+    } else {
+      return 'https://flagcdn.com/w20/jp.jpg';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(
-          height: 180,
-          width: 120,
+          height: 170,
+          width: 125,
           margin: const EdgeInsets.symmetric(horizontal: 4),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8),
             image: DecorationImage(
               image: CachedNetworkImageProvider(imageUrl),
               fit: BoxFit.cover,
             ),
           ),
           foregroundDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8),
             gradient: LinearGradient(
               begin: Alignment.center,
               end: Alignment.bottomCenter,
@@ -52,7 +66,7 @@ class CustomCardNormal extends StatelessWidget {
               borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
-              episodeCount,
+              chapter,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 10,
@@ -62,9 +76,19 @@ class CustomCardNormal extends StatelessWidget {
           ),
         ),
         Positioned(
+          right: 9,
+          top: 8,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(2),
+            child: CachedNetworkImage(
+              imageUrl: getFlagImage(type: type),
+            ),
+          ),
+        ),
+        Positioned(
           left: 4,
           right: 4,
-          bottom: 8,
+          bottom: 13,
           child: Text(
             title,
             maxLines: 2,

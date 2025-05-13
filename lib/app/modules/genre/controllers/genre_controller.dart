@@ -14,7 +14,7 @@ class GenreController extends GetxController {
   Future<void> fetchGenres() async {
     try {
       isLoading(true);
-      print('kaka'+_genreService.fetchGenres().toString());
+      print('kaka${_genreService.fetchGenres()}');
       genreData.value = await _genreService.fetchGenres();
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch genres: $e');
