@@ -19,36 +19,9 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: SingleChildScrollView(
-        // physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             _buildHeroImage(context),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       const Text(
-            //         "Hi, Rafsan",
-            //         style: TextStyle(
-            //           color: Colors.white,
-            //           fontSize: 30,
-            //           fontWeight: FontWeight.bold,
-            //         ),
-            //       ),
-            //       IconButton(
-            //         icon: const Icon(
-            //           Icons.search_rounded,
-            //           color: Colors.white,
-            //           size: 30,
-            //         ),
-            //         onPressed: () {
-            //           Get.toNamed(Routes.SEARCH);
-            //         },
-            //       ),
-            //     ],
-            //   ),
-            // ),
             const SizedBox(height: 20),
             const KomikCardsSection(),
           ],
@@ -58,100 +31,111 @@ class HomeView extends GetView<HomeController> {
   }
 
   Widget _buildHeroImage(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          height: 390,
-          child: PageView.builder(
-            controller: controller.pageController,
-            itemCount: controller.heroComics.length,
-            onPageChanged: (value) => controller.currentPage.value = value,
-            itemBuilder: (context, index) {
-              final comic = controller.heroComics[index];
-              return SizedBox(
-                width: double.infinity,
-                height: 390,
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: CachedNetworkImage(
-                        imageUrl: comic['image']!,
-                        fit: BoxFit.cover,
-                        alignment: Alignment.topCenter,
-                      ),
-                    ),
-                    Positioned.fill(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.transparent,
-                              Colors.transparent,
-                              kBackgroundColor.withOpacity(0.8),
-                              kBackgroundColor,
-                            ],
-                            stops: const [0.0, 0.4, 0.75, 1.0],
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return _buildHeroImageSkeleton();
+      }
+      return Column(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            height: 390,
+            child: PageView.builder(
+              controller: controller.pageController,
+              itemCount: controller.heroComics.length,
+              onPageChanged: (value) => controller.currentPage.value = value,
+              itemBuilder: (context, index) {
+                final comic = controller.heroComics[index];
+                return SizedBox(
+                  width: double.infinity,
+                  height: 390,
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: CachedNetworkImage(
+                          imageUrl: comic['image']!,
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topCenter,
+                          placeholder: (context, url) => Container(
+                            color: kSearchbarColor,
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            color: kSearchbarColor,
+                            child: const Icon(Icons.error),
                           ),
                         ),
                       ),
-                    ),
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                        child: Column(
-                          children: [
-                            Text(
-                              comic['subtitle']!.toUpperCase(),
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
-                              ),
+                      Positioned.fill(
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.transparent,
+                                Colors.transparent,
+                                kBackgroundColor.withOpacity(0.8),
+                                kBackgroundColor,
+                              ],
+                              stops: const [0.0, 0.4, 0.75, 1.0],
                             ),
-                            const SizedBox(height: 0),
-                            Text(
-                              comic['title']!,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            SizedBox(
-                              width: 200,
-                              child: OutlinedButton(
-                                onPressed: () => Get.toNamed(
-                                    Routes.COMIC_DETAIL,
-                                    arguments: comic['comicId']),
-                                style: OutlinedButton.styleFrom(),
-                                child: const Text(
-                                  'Read Now',
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        bottom: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 40),
+                          child: Column(
+                            children: [
+                              Text(
+                                comic['subtitle']!.toUpperCase(),
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              const SizedBox(height: 0),
+                              Text(
+                                comic['title']!,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              SizedBox(
+                                width: 200,
+                                child: OutlinedButton(
+                                  onPressed: () => Get.toNamed(
+                                      Routes.COMIC_DETAIL,
+                                      arguments: comic['comicId']),
+                                  style: OutlinedButton.styleFrom(),
+                                  child: const Text(
+                                    'Read Now',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-        const SizedBox(height: 25),
-        SmoothPageIndicator(
-          controller: controller.pageController,
-          count: controller.heroComics.length,
-          effect: SlideEffect(
+          const SizedBox(height: 25),
+          SmoothPageIndicator(
+            controller: controller.pageController,
+            count: controller.heroComics.length,
+            effect: SlideEffect(
               spacing: 8.0,
               radius: 30,
               dotWidth: 6,
@@ -159,7 +143,27 @@ class HomeView extends GetView<HomeController> {
               paintStyle: PaintingStyle.fill,
               strokeWidth: 1.5,
               dotColor: Colors.grey.shade800,
-              activeDotColor: Colors.grey),
+              activeDotColor: Colors.grey,
+            ),
+          ),
+        ],
+      );
+    });
+  }
+
+  Widget _buildHeroImageSkeleton() {
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          height: 390,
+          color: kSearchbarColor,
+        ),
+        const SizedBox(height: 25),
+        Container(
+          height: 6,
+          width: 100,
+          color: kSearchbarColor,
         ),
       ],
     );
@@ -173,7 +177,7 @@ class KomikCardsSection extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
+        return _buildLoadingSkeleton();
       }
       if (controller.comicData.value.comicsList.isEmpty &&
           controller.popularKomikData.value.popularManga.isEmpty) {
@@ -187,29 +191,169 @@ class KomikCardsSection extends GetView<HomeController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHistorySection(context),
+            const SizedBox(height: 16),
             _buildSectionTitle(context, "top_10_popular".tr),
             const SizedBox(height: 8),
             _buildPopularGrid(context),
-            const SizedBox(height: 5),
+            const SizedBox(height: 16),
             _buildSectionTitle(context, "genre_selection".tr),
             const SizedBox(height: 8),
             _buildGenreChips(context),
-            const SizedBox(height: 5),
+            const SizedBox(height: 16),
             _buildSectionTitle(context, "latest".tr),
             const SizedBox(height: 8),
             _buildTerbaruGrid(context),
-            const SizedBox(height: 5),
+            const SizedBox(height: 16),
           ],
         ),
       );
     });
   }
 
+  Widget _buildLoadingSkeleton() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // History section skeleton
+            Container(
+              height: 140,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: kSearchbarColor,
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Popular section skeleton
+            Container(
+              height: 20,
+              width: 150,
+              color: kSearchbarColor,
+              margin: const EdgeInsets.only(bottom: 8),
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 184,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return Container(
+                    width: 120,
+                    margin: const EdgeInsets.only(right: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 150,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: kSearchbarColor,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Container(
+                          height: 12,
+                          width: 100,
+                          color: kSearchbarColor,
+                        ),
+                        const SizedBox(height: 4),
+                        Container(
+                          height: 10,
+                          width: 60,
+                          color: kSearchbarColor,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Genre chips skeleton
+            Container(
+              height: 20,
+              width: 150,
+              color: kSearchbarColor,
+              margin: const EdgeInsets.only(bottom: 8),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              height: 36,
+              margin: const EdgeInsets.only(bottom: 8),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 6,
+                itemBuilder: (context, index) {
+                  return Container(
+                    width: 80,
+                    height: 36,
+                    margin: const EdgeInsets.only(right: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: kSearchbarColor,
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Latest section skeleton
+            Container(
+              height: 20,
+              width: 150,
+              color: kSearchbarColor,
+              margin: const EdgeInsets.only(bottom: 8),
+            ),
+            const SizedBox(height: 8),
+            GridView.builder(
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 0.65,
+                crossAxisSpacing: 8,
+              ),
+              itemCount: 6,
+              itemBuilder: (context, index) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 144,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: kSearchbarColor,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      height: 12,
+                      color: kSearchbarColor,
+                    ),
+                    const SizedBox(height: 4),
+                    Container(
+                      height: 10,
+                      width: 60,
+                      color: kSearchbarColor,
+                    ),
+                    const SizedBox(height: 4),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildHistorySection(BuildContext context) {
-    final history = Get.find<HistoryController>().histories.first;
-    final lastComic = controller.comicData.value.comicsList.isNotEmpty
-        ? controller.comicData.value.comicsList[0]
-        : null;
+    final history = controller.historyController.histories.first;
 
     return Container(
       height: 140,
@@ -217,13 +361,14 @@ class KomikCardsSection extends GetView<HomeController> {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            image: DecorationImage(
-              image: CachedNetworkImageProvider(
-                history.coverImage,
-              ),
-              fit: BoxFit.cover,
-            )),
+          borderRadius: BorderRadius.circular(12),
+          image: DecorationImage(
+            image: CachedNetworkImageProvider(
+              history.coverImage,
+            ),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
@@ -334,40 +479,10 @@ class KomikCardsSection extends GetView<HomeController> {
         crossAxisCount: 3,
         childAspectRatio: 0.7,
         crossAxisSpacing: 8,
-        // mainAxisSpacing: 12,
       ),
       itemCount: terbaruComics.length,
       itemBuilder: (context, index) {
         final comic = terbaruComics[index];
-        return GestureDetector(
-          onTap: () {
-            Get.toNamed(Routes.COMIC_DETAIL, arguments: comic.comicId);
-          },
-          child: CustomCardNormal(
-            title: comic.title,
-            chapter: comic.chapter,
-            imageUrl: comic.image,
-            type: comic.type,
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildKomikGrid(BuildContext context) {
-    final completedComics = controller.comicData.value.comicsList
-        .where((comic) => comic.status!.toLowerCase() == 'completed')
-        .toList();
-
-    return GridView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-      ),
-      itemCount: completedComics.length,
-      itemBuilder: (context, index) {
-        final comic = completedComics[index];
         return GestureDetector(
           onTap: () {
             Get.toNamed(Routes.COMIC_DETAIL, arguments: comic.comicId);

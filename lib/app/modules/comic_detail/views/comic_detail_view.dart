@@ -7,19 +7,27 @@ import 'package:komikaze/app/modules/history/controllers/history_controller.dart
 import 'package:komikaze/app/routes/app_pages.dart';
 import 'package:readmore/readmore.dart';
 
+const kBackgroundColor = Color(0xff121012);
+const kButtonColor = Color.fromARGB(255, 89, 54, 133);
+const kSearchbarColor = Color(0xff382C3E);
+
 class ComicDetailView extends GetView<ComicDetailController> {
   const ComicDetailView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final comicId = Get.arguments as String;
-    controller.fetchComicDetail(comicId);
+    
 
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return Stack(
+            children: [
+              const ComicDetailSkeletonLoader(),
+              _buildCloseButton(context),
+            ],
+          );
         }
 
         final comic = controller.comicDetailData.value.comicDetail;
@@ -74,6 +82,33 @@ class ComicDetailView extends GetView<ComicDetailController> {
             child: Image.network(
               imageUrl,
               fit: BoxFit.cover,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Container(
+                  color: kSearchbarColor,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                      color: kButtonColor,
+                    ),
+                  ),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  color: kSearchbarColor,
+                  child: const Center(
+                    child: Icon(
+                      Icons.broken_image_rounded,
+                      color: Colors.white54,
+                      size: 64,
+                    ),
+                  ),
+                );
+              },
             ),
           ),
           Positioned.fill(
@@ -320,6 +355,9 @@ class ComicDetailView extends GetView<ComicDetailController> {
                                   comic.title,
                                   comic.coverImage,
                                 );
+                              } else {
+                                Get.snackbar(
+                                    'Info', 'chapter_already_downloaded'.tr);
                               }
                             },
                           );
@@ -365,7 +403,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
               }
             },
             child: Text(
-              "first_chapter".tr,
+              'first_chapter'.tr,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -395,7 +433,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
               }
             },
             child: Text(
-              "last_chapter".tr,
+              'last_chapter'.tr,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -440,7 +478,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
       lastRead: DateTime.now(),
       type: comic.type,
     );
-    Get.put(HistoryController()).addHistory(historyItem);
+    Get.find<HistoryController>().addHistory(historyItem);
     Get.toNamed(Routes.CHAPTER, arguments: {
       'chapterId': chapterId,
       'comicId': comic.comicId,
@@ -449,6 +487,218 @@ class ComicDetailView extends GetView<ComicDetailController> {
   }
 }
 
-const kBackgroundColor = Color(0xff121012);
-const kButtonColor = Color.fromARGB(255, 89, 54, 133);
-const kSearchbarColor = Color(0xff382C3E);
+class ComicDetailSkeletonLoader extends StatelessWidget {
+  const ComicDetailSkeletonLoader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _buildCoverImageSkeleton(),
+          Container(
+            margin:
+                const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildTitleSkeleton(),
+                const SizedBox(height: 10),
+                _buildGenreChipsSkeleton(),
+                const SizedBox(height: 10),
+                _buildSynopsisSkeleton(),
+                const SizedBox(height: 10),
+                _buildInfoSectionSkeleton(),
+                const SizedBox(height: 10),
+                _buildChapterButtonsSkeleton(),
+                const SizedBox(height: 10),
+                _buildChaptersListSkeleton(),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCoverImageSkeleton() {
+    return Container(
+      width: double.infinity,
+      height: 480,
+      color: kSearchbarColor,
+    );
+  }
+
+  Widget _buildTitleSkeleton() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 500,
+          height: 30,
+          decoration: BoxDecoration(
+            color: kSearchbarColor,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          width: 150,
+          height: 15,
+          decoration: BoxDecoration(
+            color: kSearchbarColor,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGenreChipsSkeleton() {
+    return SizedBox(
+      height: 36,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return Row(
+            children: [
+              SizedBox(width: index == 0 ? 0 : 8),
+              Container(
+                width: 70,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: kSearchbarColor,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildSynopsisSkeleton() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: double.infinity,
+          height: 12,
+          decoration: BoxDecoration(
+            color: kSearchbarColor,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          width: double.infinity,
+          height: 12,
+          decoration: BoxDecoration(
+            color: kSearchbarColor,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          width: 200,
+          height: 12,
+          decoration: BoxDecoration(
+            color: kSearchbarColor,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoSectionSkeleton() {
+    return Column(
+      children: List.generate(
+        6,
+        (index) => Column(
+          children: [
+            const SizedBox(height: 8),
+            Container(
+              width: 180,
+              height: 14,
+              decoration: BoxDecoration(
+                color: kSearchbarColor,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChapterButtonsSkeleton() {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: kSearchbarColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: kSearchbarColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildChaptersListSkeleton() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 100,
+          height: 20,
+          decoration: BoxDecoration(
+            color: kSearchbarColor,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          height: 50,
+          decoration: BoxDecoration(
+            color: kSearchbarColor,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        const SizedBox(height: 10),
+        ...List.generate(
+          5,
+          (index) => Column(
+            children: [
+              Container(
+                height: 70,
+                decoration: BoxDecoration(
+                  color: kSearchbarColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}

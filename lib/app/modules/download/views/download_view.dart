@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:komikaze/app/modules/download/controllers/download_controller.dart';
 import 'package:komikaze/app/routes/app_pages.dart';
-import 'package:get_storage/get_storage.dart';
 
 const kBackgroundColor = Color(0xff121012);
+const kButtonColor = Color.fromARGB(255, 89, 54, 133);
 const kSearchbarColor = Color(0xff382C3E);
 
 class DownloadView extends GetView<DownloadController> {
@@ -51,24 +51,28 @@ class DownloadView extends GetView<DownloadController> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 89, 54, 133),
+                    backgroundColor: kButtonColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12)),
                   ),
                   onPressed: () => Get.toNamed(Routes.MAIN),
-                  child: Text('browse_comics'.tr),
+                  child: Text(
+                    'browse_comics'.tr,
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),
           );
         }
         return ListView.separated(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          separatorBuilder: (context, index) => const SizedBox(height: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+          separatorBuilder: (context, index) => const SizedBox(height: 10),
           itemCount: controller.downloadedChapters.length,
           itemBuilder: (context, index) {
             final chapter = controller.downloadedChapters[index];
             return Card(
+              margin: EdgeInsets.zero,
               color: kSearchbarColor,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
@@ -101,9 +105,9 @@ class DownloadView extends GetView<DownloadController> {
                   icon: const Icon(Icons.delete, color: Colors.white54),
                   onPressed: () {
                     Get.defaultDialog(
-                      title: 'Delete Chapter',
-                      content: Text(
-                          'confirm_delete'.tr + '${chapter.chapterTitle}?'),
+                      title: 'delete_chapter'.tr,
+                      content: Text('confirm_delete'
+                          .trParams({'chapter': chapter.chapterTitle})),
                       confirm: TextButton(
                         onPressed: () {
                           controller.deleteChapter(chapter);
@@ -130,17 +134,6 @@ class DownloadView extends GetView<DownloadController> {
           },
         );
       }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final chapters =
-              GetStorage().read<List<dynamic>>('downloadedChapters') ?? [];
-          print('GetStorage content: $chapters');
-          print(
-              'Current downloadedChapters: ${controller.downloadedChapters.map((c) => c.toJson())}');
-        },
-        backgroundColor: const Color.fromARGB(255, 89, 54, 133),
-        child: const Icon(Icons.bug_report),
-      ),
     );
   }
 }

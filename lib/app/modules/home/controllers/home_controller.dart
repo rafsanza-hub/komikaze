@@ -6,10 +6,12 @@ import 'package:komikaze/app/data/models/comic.dart';
 import 'package:komikaze/app/data/models/popular_comic.dart';
 import 'package:komikaze/app/data/services/comic_service.dart';
 import 'package:komikaze/app/modules/genre/controllers/genre_controller.dart';
+import 'package:komikaze/app/modules/history/controllers/history_controller.dart';
 
 class HomeController extends GetxController {
   final ComicService _comicService = ComicService();
   final GenreController genreController = Get.find();
+  final HistoryController historyController = Get.find();
   PageController pageController = PageController(initialPage: 0);
   Timer? _timer;
   final currentPage = 0.obs;
@@ -94,6 +96,7 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     genreController.fetchGenres();
+
     fetchComics();
     fetchPopularComics();
     print('genre: ${genreController.genreData.value.genres}');
@@ -104,6 +107,7 @@ class HomeController extends GetxController {
   void onReady() {
     super.onReady();
     _startAutoScroll();
+    historyController.histories.first.coverImage;
   }
 
   @override

@@ -15,7 +15,7 @@ class CustomCardNormal extends StatelessWidget {
     this.type,
   });
 
-  String getFlagImage({type = 'manga'}) {
+  String getFlagImage(type) {
     if (type == 'manga') {
       return 'https://flagcdn.com/w20/jp.jpg';
     } else if (type == 'manhwa') {
@@ -33,7 +33,7 @@ class CustomCardNormal extends StatelessWidget {
       children: [
         Container(
           height: 170,
-          width: 125,
+          width: 120,
           margin: const EdgeInsets.symmetric(horizontal: 4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
@@ -76,16 +76,6 @@ class CustomCardNormal extends StatelessWidget {
           ),
         ),
         Positioned(
-          right: 9,
-          top: 8,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(2),
-            child: CachedNetworkImage(
-              imageUrl: getFlagImage(type: type),
-            ),
-          ),
-        ),
-        Positioned(
           left: 4,
           right: 4,
           bottom: 13,
@@ -108,6 +98,17 @@ class CustomCardNormal extends StatelessWidget {
             ),
           ),
         ),
+        if (type != null)
+          Positioned(
+            right: 9,
+            top: 8,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(2),
+              child: CachedNetworkImage(
+                imageUrl: getFlagImage(type),
+              ),
+            ),
+          ),
       ],
     );
   }

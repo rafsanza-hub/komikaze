@@ -11,6 +11,8 @@ class ComicDetailController extends GetxController {
   final ComicService _comicService = ComicService();
   final GetStorage _storage = GetStorage();
 
+  final comicId = Get.arguments as String;
+
   var comicDetailData = ComicDetailData(
     comicDetail: ComicDetail(
       comicId: '',
@@ -39,7 +41,7 @@ class ComicDetailController extends GetxController {
       isLoading(true);
       comicDetailData.value = await _comicService.fetchComicDetail(comicId);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch comic detail: $e');
+      Get.snackbar('Error', 'error_fetch'.trParams({'error': e.toString()}));
     } finally {
       isLoading(false);
     }
@@ -64,8 +66,16 @@ class ComicDetailController extends GetxController {
     try {
       downloadingChapters[chapter.chapterId] = 0.0;
       print('Starting download for chapter: ${chapter.chapterId}');
+
+      // Verify GetStorage initialization
+      if (!_storage.hasData('downloadedChapters')) {
+        await _storage.write('downloadedChapters', []);
+        print('Initialized downloadedChapters in GetStorage');
+      }
+
       final chapterData = await _comicService.fetchChapter(chapter.chapterId);
       final images = chapterData.chapter.images;
+      print('Fetched chapter data with ${images.length} images');
 
       final dir = await getApplicationDocumentsDirectory();
       final chapterDir =
@@ -98,21 +108,30 @@ class ComicDetailController extends GetxController {
 
       final downloadedChapters =
           _storage.read<List<dynamic>>('downloadedChapters') ?? [];
-      // Cek apakah chapter sudah ada untuk mencegah duplikasi
       if (!downloadedChapters
           .any((json) => json['chapterId'] == chapter.chapterId)) {
         downloadedChapters.add(downloadedChapter.toJson());
-        await _storage.write('downloadedChapters', downloadedChapters);
-        print('Saved to storage: ${downloadedChapter.toJson()}');
+        try {
+          await _storage.write('downloadedChapters', downloadedChapters);
+          await _storage.save();
+          print('Saved to storage: ${downloadedChapter.toJson()}');
+          final savedData = _storage.read<List<dynamic>>('downloadedChapters');
+          print('Verified storage after save: $savedData');
+        } catch (e) {
+          print('Error saving to GetStorage: $e');
+          Get.snackbar(
+              'Error', 'error_save_storage'.trParams({'error': e.toString()}));
+          return;
+        }
       } else {
         print(
             'Chapter ${chapter.chapterId} already exists in storage, skipping');
       }
 
-      Get.snackbar('Success', 'Chapter downloaded successfully');
+      Get.snackbar('Success', 'success_download'.tr);
     } catch (e) {
       print('Error downloading chapter: $e');
-      Get.snackbar('Error', 'Failed to download chapter: $e');
+      Get.snackbar('Error', 'error_download'.trParams({'error': e.toString()}));
     } finally {
       downloadingChapters.remove(chapter.chapterId);
     }
@@ -122,5 +141,12 @@ class ComicDetailController extends GetxController {
     final downloadedChapters =
         _storage.read<List<dynamic>>('downloadedChapters') ?? [];
     return downloadedChapters.any((json) => json['chapterId'] == chapterId);
+  }
+
+  @override
+  void onInit() {
+    fetchComicDetail(comicId);
+
+    super.onInit();
   }
 }

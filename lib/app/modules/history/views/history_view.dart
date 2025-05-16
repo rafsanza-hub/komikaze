@@ -5,24 +5,22 @@ import 'package:komikaze/app/data/models/history.dart';
 import 'package:komikaze/app/modules/history/controllers/history_controller.dart';
 import 'package:komikaze/app/routes/app_pages.dart';
 
+const kBackgroundColor = Color(0xff121012);
+const kButtonColor = Color.fromARGB(255, 89, 54, 133);
+const kSearchbarColor = Color(0xff382C3E);
+
 class HistoryView extends GetView<HistoryController> {
   const HistoryView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: kBackgroundColor,
       appBar: AppBar(
         title: Text('history_title'.tr),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.delete_outline),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: Obx(() {
         final histories = controller.histories;
@@ -79,7 +77,7 @@ class HistoryView extends GetView<HistoryController> {
     return Card(
       elevation: 0,
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      color: Colors.grey[850],
+      color: kSearchbarColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -224,7 +222,3 @@ class HistoryView extends GetView<HistoryController> {
     }
   }
 }
-
-const kBackgroundColor = Color(0xff121012);
-const kButtonColor = Color.fromARGB(255, 89, 54, 133);
-const kSearchbarColor = Color(0xff382C3E);
