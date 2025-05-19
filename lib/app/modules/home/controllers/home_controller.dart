@@ -61,7 +61,7 @@ class HomeController extends GetxController {
       print('error cuy: $e');
       Get.snackbar('Error', 'An error occurred: $e');
     } finally {
-      isLoading(false);
+      isLoading(true);
     }
   }
 
@@ -72,7 +72,7 @@ class HomeController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'Failed to fetch popular comics: $e');
     } finally {
-      isLoading(false);
+      isLoading(true);
     }
   }
 

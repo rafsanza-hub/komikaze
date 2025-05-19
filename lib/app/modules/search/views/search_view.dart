@@ -26,8 +26,6 @@ class SearchView extends GetView<search_controller.SearchController> {
           'Search Comics',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
           ),
         ),
       ),
@@ -86,7 +84,7 @@ class SearchView extends GetView<search_controller.SearchController> {
                 );
               }
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: GridView.builder(
                   physics: const BouncingScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

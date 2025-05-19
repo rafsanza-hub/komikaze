@@ -7,6 +7,7 @@ import 'package:komikaze/app/modules/comic_detail/controllers/comic_detail_contr
 import 'package:komikaze/app/modules/history/controllers/history_controller.dart';
 import 'package:komikaze/app/routes/app_pages.dart';
 import 'package:readmore/readmore.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ComicDetailView extends GetView<ComicDetailController> {
   const ComicDetailView({super.key});
@@ -495,31 +496,36 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          _buildCoverImageSkeleton(),
-          Container(
-            margin:
-                const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildTitleSkeleton(),
-                const SizedBox(height: 10),
-                _buildGenreChipsSkeleton(),
-                const SizedBox(height: 10),
-                _buildSynopsisSkeleton(),
-                const SizedBox(height: 10),
-                _buildInfoSectionSkeleton(),
-                const SizedBox(height: 10),
-                _buildChapterButtonsSkeleton(),
-                const SizedBox(height: 10),
-                _buildChaptersListSkeleton(),
-                const SizedBox(height: 20),
-              ],
+      child: Shimmer.fromColors(
+        direction: ShimmerDirection.ltr,
+        baseColor: AppColors.searchBar,
+        highlightColor: Color(0xff5B4563),
+        child: Column(
+          children: [
+            _buildCoverImageSkeleton(),
+            Container(
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildTitleSkeleton(),
+                  const SizedBox(height: 10),
+                  _buildGenreChipsSkeleton(),
+                  const SizedBox(height: 10),
+                  _buildSynopsisSkeleton(),
+                  const SizedBox(height: 10),
+                  _buildInfoSectionSkeleton(),
+                  const SizedBox(height: 10),
+                  _buildChapterButtonsSkeleton(),
+                  const SizedBox(height: 10),
+                  _buildChaptersListSkeleton(),
+                  const SizedBox(height: 40),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -537,7 +543,7 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 500,
+          width: 300,
           height: 30,
           decoration: BoxDecoration(
             color: AppColors.searchBar,
@@ -619,13 +625,14 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
 
   Widget _buildInfoSectionSkeleton() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: List.generate(
         6,
         (index) => Column(
           children: [
             const SizedBox(height: 8),
             Container(
-              width: 180,
+              width: index % 2 == 0 ? 170 : 180,
               height: 14,
               decoration: BoxDecoration(
                 color: AppColors.searchBar,
@@ -686,7 +693,7 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         ...List.generate(
-          5,
+          10,
           (index) => Column(
             children: [
               Container(
