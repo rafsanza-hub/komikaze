@@ -3,29 +3,63 @@ name: Build Flutter APK
 on:
   push:
     branches: [master]
-  pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.27.1'
+          channel: 'stable'
+
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/komikaze.jks
+          chmod 400 android/app/komikaze.jks  # More secure permission
+          # Verify keystore
+          keytool -list -v \
+            -keystore android/app/komikaze.jks \
+            -storepass ${{ vars.KEYSTORE_PASSWORD }} \
+            -alias ${{ vars.KEY_ALIAS }} || exit 1
+
+      - name: Setup Firebase
+        run: |
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > android/app/google-services.json
+          jq empty android/app/google-services.json || exit 1
 
       - name: Install Dependencies
-        run: flutter pub get
+        run: |
+          flutter pub get
+          flutter precache --android
 
       - name: Build APK
-        run: flutter build apk --release
+        env:
+          KEYSTORE_PASSWORD: ${{ vars.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ vars.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ vars.KEY_PASSWORD }}
+        run: |
+          flutter build apk --release \
+            --build-name=1.0.0 \
+            --build-number=${{ github.run_number }}
 
-      - name: Upload APK Artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-release
+          name: komikaze-v1.0.${{ github.run_number }}
           path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 7
