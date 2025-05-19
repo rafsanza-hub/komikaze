@@ -99,6 +99,7 @@ class HomeController extends GetxController {
 
     fetchComics();
     fetchPopularComics();
+
     print('genre: ${genreController.genreData.value.genres}');
     super.onInit();
   }
@@ -106,8 +107,11 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    _startAutoScroll();
-    historyController.histories.first.coverImage;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (pageController.hasClients) {
+        _startAutoScroll();
+      }
+    });
   }
 
   @override

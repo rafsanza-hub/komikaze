@@ -2,7 +2,7 @@ const Map<String, String> enUS = {
   // General
   'app_name': 'Komikaze',
   'home': 'Home',
-  'downloads': 'Downloads',
+  'downloads': 'Download',
   'history': 'History',
   'profile': 'Profile',
   'settings': 'Settings',

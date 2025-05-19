@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
-import 'package:komikaze/app/modules/history/controllers/history_controller.dart';
+import 'package:komikaze/app/core/constants/colors.dart';
 import 'package:komikaze/app/modules/home/controllers/home_controller.dart';
 import 'package:komikaze/app/routes/app_pages.dart';
 import 'package:komikaze/app/widgets/custom_card_normal.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
-const kBackgroundColor = Color(0xff121012);
-const kButtonColor = Color.fromARGB(255, 89, 54, 133);
-const kSearchbarColor = Color(0xff382C3E);
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -17,7 +13,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.background,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -57,10 +53,10 @@ class HomeView extends GetView<HomeController> {
                           fit: BoxFit.cover,
                           alignment: Alignment.topCenter,
                           placeholder: (context, url) => Container(
-                            color: kSearchbarColor,
+                            color: AppColors.searchBar,
                           ),
                           errorWidget: (context, url, error) => Container(
-                            color: kSearchbarColor,
+                            color: AppColors.searchBar,
                             child: const Icon(Icons.error),
                           ),
                         ),
@@ -74,8 +70,8 @@ class HomeView extends GetView<HomeController> {
                               colors: [
                                 Colors.transparent,
                                 Colors.transparent,
-                                kBackgroundColor.withOpacity(0.8),
-                                kBackgroundColor,
+                                AppColors.background.withOpacity(0.8),
+                                AppColors.background,
                               ],
                               stops: const [0.0, 0.4, 0.75, 1.0],
                             ),
@@ -157,13 +153,13 @@ class HomeView extends GetView<HomeController> {
         Container(
           width: double.infinity,
           height: 390,
-          color: kSearchbarColor,
+          color: AppColors.searchBar,
         ),
         const SizedBox(height: 25),
         Container(
           height: 6,
           width: 100,
-          color: kSearchbarColor,
+          color: AppColors.searchBar,
         ),
       ],
     );
@@ -186,7 +182,7 @@ class KomikCardsSection extends GetView<HomeController> {
                 style: TextStyle(color: Colors.white)));
       }
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -195,15 +191,15 @@ class KomikCardsSection extends GetView<HomeController> {
             _buildSectionTitle(context, "top_10_popular".tr),
             const SizedBox(height: 8),
             _buildPopularGrid(context),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             _buildSectionTitle(context, "genre_selection".tr),
             const SizedBox(height: 8),
             _buildGenreChips(context),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             _buildSectionTitle(context, "latest".tr),
             const SizedBox(height: 8),
             _buildTerbaruGrid(context),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
           ],
         ),
       );
@@ -223,7 +219,7 @@ class KomikCardsSection extends GetView<HomeController> {
               margin: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: kSearchbarColor,
+                color: AppColors.searchBar,
               ),
             ),
             const SizedBox(height: 20),
@@ -231,7 +227,7 @@ class KomikCardsSection extends GetView<HomeController> {
             Container(
               height: 20,
               width: 150,
-              color: kSearchbarColor,
+              color: AppColors.searchBar,
               margin: const EdgeInsets.only(bottom: 8),
             ),
             const SizedBox(height: 8),
@@ -251,20 +247,20 @@ class KomikCardsSection extends GetView<HomeController> {
                           height: 150,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: kSearchbarColor,
+                            color: AppColors.searchBar,
                           ),
                         ),
                         const SizedBox(height: 8),
                         Container(
                           height: 12,
                           width: 100,
-                          color: kSearchbarColor,
+                          color: AppColors.searchBar,
                         ),
                         const SizedBox(height: 4),
                         Container(
                           height: 10,
                           width: 60,
-                          color: kSearchbarColor,
+                          color: AppColors.searchBar,
                         ),
                       ],
                     ),
@@ -277,7 +273,7 @@ class KomikCardsSection extends GetView<HomeController> {
             Container(
               height: 20,
               width: 150,
-              color: kSearchbarColor,
+              color: AppColors.searchBar,
               margin: const EdgeInsets.only(bottom: 8),
             ),
             const SizedBox(height: 8),
@@ -294,7 +290,7 @@ class KomikCardsSection extends GetView<HomeController> {
                     margin: const EdgeInsets.only(right: 8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: kSearchbarColor,
+                      color: AppColors.searchBar,
                     ),
                   );
                 },
@@ -305,7 +301,7 @@ class KomikCardsSection extends GetView<HomeController> {
             Container(
               height: 20,
               width: 150,
-              color: kSearchbarColor,
+              color: AppColors.searchBar,
               margin: const EdgeInsets.only(bottom: 8),
             ),
             const SizedBox(height: 8),
@@ -315,8 +311,9 @@ class KomikCardsSection extends GetView<HomeController> {
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                childAspectRatio: 0.65,
+                childAspectRatio: 0.75,
                 crossAxisSpacing: 8,
+                mainAxisExtent: 200,
               ),
               itemCount: 6,
               itemBuilder: (context, index) {
@@ -327,19 +324,19 @@ class KomikCardsSection extends GetView<HomeController> {
                       height: 144,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        color: kSearchbarColor,
+                        color: AppColors.searchBar,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Container(
                       height: 12,
-                      color: kSearchbarColor,
+                      color: AppColors.searchBar,
                     ),
                     const SizedBox(height: 4),
                     Container(
                       height: 10,
                       width: 60,
-                      color: kSearchbarColor,
+                      color: AppColors.searchBar,
                     ),
                     const SizedBox(height: 4),
                   ],
@@ -353,18 +350,21 @@ class KomikCardsSection extends GetView<HomeController> {
   }
 
   Widget _buildHistorySection(BuildContext context) {
-    final history = controller.historyController.histories.first;
-
-    return Container(
+    final histories = controller.historyController.histories;
+    if (histories.isEmpty) {
+      return Container(
+        height: 0,
+      );
+    }
+    return SizedBox(
       height: 140,
-      margin: const EdgeInsets.symmetric(vertical: 10),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           image: DecorationImage(
             image: CachedNetworkImageProvider(
-              history.coverImage,
+              histories.first.coverImage,
             ),
             fit: BoxFit.cover,
           ),
@@ -381,7 +381,7 @@ class KomikCardsSection extends GetView<HomeController> {
               ],
             ),
           ),
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -395,7 +395,7 @@ class KomikCardsSection extends GetView<HomeController> {
               ),
               const SizedBox(height: 4),
               Text(
-                history.title,
+                histories.first.title,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
@@ -407,7 +407,8 @@ class KomikCardsSection extends GetView<HomeController> {
               const SizedBox(height: 8),
               TextButton.icon(
                 onPressed: () {
-                  Get.toNamed(Routes.COMIC_DETAIL, arguments: history.comicId);
+                  Get.toNamed(Routes.COMIC_DETAIL,
+                      arguments: histories.first.comicId);
                 },
                 icon: const Icon(
                   Icons.play_circle_outline,
@@ -443,10 +444,10 @@ class KomikCardsSection extends GetView<HomeController> {
     final popularComics = controller.popularKomikData.value.popularManga;
 
     return Container(
-      height: 180,
+      height: 190,
       child: ListView.builder(
-        padding: EdgeInsets.zero,
         scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.zero,
         physics: const BouncingScrollPhysics(),
         itemCount: popularComics.length,
         itemBuilder: (context, index) {
@@ -477,8 +478,9 @@ class KomikCardsSection extends GetView<HomeController> {
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        childAspectRatio: 0.7,
+        childAspectRatio: 0.75,
         crossAxisSpacing: 8,
+        mainAxisExtent: 200,
       ),
       itemCount: terbaruComics.length,
       itemBuilder: (context, index) {
@@ -513,7 +515,7 @@ class KomikCardsSection extends GetView<HomeController> {
           return Padding(
             padding: const EdgeInsets.only(right: 8),
             child: ActionChip(
-              backgroundColor: kSearchbarColor,
+              backgroundColor: AppColors.searchBar,
               side: BorderSide.none,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               label: Text(
@@ -555,7 +557,7 @@ class KomikCardsSection extends GetView<HomeController> {
             child: const Text(
               "See all",
               style: TextStyle(
-                color: kButtonColor,
+                color: AppColors.primary,
                 fontSize: 17,
                 fontWeight: FontWeight.w300,
               ),

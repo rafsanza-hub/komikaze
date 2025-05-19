@@ -38,8 +38,10 @@ class ProfileController extends GetxController {
   void onInit() {
     super.onInit();
     selectedLanguage.value = _storage.read('language') ?? 'en_US';
-    Get.updateLocale(Locale(selectedLanguage.value.split('_')[0],
-        selectedLanguage.value.split('_')[1]));
+    Future.delayed(Duration.zero, () {
+      final parts = selectedLanguage.value.split('_');
+      Get.updateLocale(Locale(parts[0], parts[1]));
+    });
   }
 
   void changeLanguage(String languageCode) {

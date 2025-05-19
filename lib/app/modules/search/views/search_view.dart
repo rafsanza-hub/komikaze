@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:komikaze/app/core/constants/colors.dart';
 import 'package:komikaze/app/modules/search/controllers/search_controller.dart'
     as search_controller;
 import 'package:komikaze/app/routes/app_pages.dart';
 import 'package:komikaze/app/widgets/custom_card_normal.dart';
-
-const kBackgroundColor = Color(0xff121012);
-const kSearchbarColor = Color(0xff382C3E);
 
 class SearchView extends GetView<search_controller.SearchController> {
   const SearchView({super.key});
@@ -16,7 +14,7 @@ class SearchView extends GetView<search_controller.SearchController> {
     final TextEditingController textController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -45,7 +43,7 @@ class SearchView extends GetView<search_controller.SearchController> {
                 hintText: 'Search for comics (e.g., Naruto)',
                 hintStyle: const TextStyle(color: Colors.white54),
                 filled: true,
-                fillColor: kSearchbarColor,
+                fillColor: AppColors.searchBar,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -93,9 +91,9 @@ class SearchView extends GetView<search_controller.SearchController> {
                   physics: const BouncingScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
-                    childAspectRatio: 0.7,
+                    childAspectRatio: 0.75,
                     crossAxisSpacing: 8,
-                    mainAxisSpacing: 12,
+                    mainAxisExtent: 200,
                   ),
                   itemCount: controller.comicsList.length,
                   itemBuilder: (context, index) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:komikaze/app/core/constants/colors.dart';
 import 'package:komikaze/app/modules/download/views/download_view.dart';
 import 'package:komikaze/app/modules/history/views/history_view.dart';
 import 'package:komikaze/app/modules/home/views/home_view.dart';
@@ -27,7 +28,7 @@ class MainView extends GetView<MainController> {
       ),
       bottomNavigationBar: Obx(() => SizedBox(
             child: BottomNavigationBar(
-              backgroundColor: kBackgroundColor,
+              backgroundColor: AppColors.background,
               currentIndex: controller.index.value,
               onTap: controller.changeIndex,
               selectedItemColor: Theme.of(context).colorScheme.primary,
@@ -51,7 +52,3 @@ class MainView extends GetView<MainController> {
     );
   }
 }
-
-const kBackgroundColor = Color(0xff121012);
-const kButtonColor = Color.fromARGB(255, 89, 54, 133);
-const kSearchbarColor = Color(0xff382C3E);

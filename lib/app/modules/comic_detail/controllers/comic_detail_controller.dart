@@ -11,8 +11,6 @@ class ComicDetailController extends GetxController {
   final ComicService _comicService = ComicService();
   final GetStorage _storage = GetStorage();
 
-  final comicId = Get.arguments as String;
-
   var comicDetailData = ComicDetailData(
     comicDetail: ComicDetail(
       comicId: '',
@@ -36,11 +34,42 @@ class ComicDetailController extends GetxController {
   var isLoading = false.obs;
   var downloadingChapters = <String, double>{}.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    // Pulihkan status download dari GetStorage
+    _syncDownloadingChapters();
+    // Pantau perubahan GetStorage secara real-time
+    _storage.listenKey('downloadingChapters', (value) {
+      print('GetStorage downloadingChapters updated: $value');
+      _syncDownloadingChapters();
+    });
+
+    // Ambil comicId dari argumen dan panggil fetchComicDetail
+    final comicId = Get.arguments as String?;
+    if (comicId != null) {
+      fetchComicDetail(comicId);
+    } else {
+      print('Error: No comicId provided');
+      Get.snackbar('Error', 'no_comic_id'.tr);
+    }
+  }
+
+  void _syncDownloadingChapters() {
+    final downloading =
+        _storage.read<Map<String, dynamic>>('downloadingChapters') ?? {};
+    downloadingChapters.assignAll(downloading
+        .map((key, value) => MapEntry(key, (value as num).toDouble())));
+    print('Synced downloadingChapters: $downloadingChapters');
+  }
+
   Future<void> fetchComicDetail(String comicId) async {
     try {
       isLoading(true);
       comicDetailData.value = await _comicService.fetchComicDetail(comicId);
+      print('Fetched comic: ${comicDetailData.value.comicDetail.title}');
     } catch (e) {
+      print('Error fetching comic detail: $e');
       Get.snackbar('Error', 'error_fetch'.trParams({'error': e.toString()}));
     } finally {
       isLoading(false);
@@ -65,9 +94,10 @@ class ComicDetailController extends GetxController {
       String comicTitle, String coverImage) async {
     try {
       downloadingChapters[chapter.chapterId] = 0.0;
+      await _storage.write('downloadingChapters', downloadingChapters);
+      await _storage.save();
       print('Starting download for chapter: ${chapter.chapterId}');
 
-      // Verify GetStorage initialization
       if (!_storage.hasData('downloadedChapters')) {
         await _storage.write('downloadedChapters', []);
         print('Initialized downloadedChapters in GetStorage');
@@ -93,6 +123,8 @@ class ComicDetailController extends GetxController {
         localImagePaths.add(filePath);
         downloadingChapters[chapter.chapterId] = (i + 1) / images.length;
         downloadingChapters.refresh();
+        await _storage.write('downloadingChapters', downloadingChapters);
+        await _storage.save();
         print('Downloaded image $i: $filePath');
       }
 
@@ -134,6 +166,9 @@ class ComicDetailController extends GetxController {
       Get.snackbar('Error', 'error_download'.trParams({'error': e.toString()}));
     } finally {
       downloadingChapters.remove(chapter.chapterId);
+      await _storage.write('downloadingChapters', downloadingChapters);
+      await _storage.save();
+      print('Cleared downloadingChapters: $downloadingChapters');
     }
   }
 
@@ -141,12 +176,5 @@ class ComicDetailController extends GetxController {
     final downloadedChapters =
         _storage.read<List<dynamic>>('downloadedChapters') ?? [];
     return downloadedChapters.any((json) => json['chapterId'] == chapterId);
-  }
-
-  @override
-  void onInit() {
-    fetchComicDetail(comicId);
-
-    super.onInit();
   }
 }

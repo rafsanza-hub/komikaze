@@ -2,11 +2,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:komikaze/app/core/constants/colors.dart';
 import '../controllers/profile_controller.dart';
-
-const kBackgroundColor = Color(0xff121012);
-const kButtonColor = Color.fromARGB(255, 89, 54, 133);
-const kSearchbarColor = Color(0xff382C3E);
 
 class ProfileView extends GetView<ProfileController> {
   const ProfileView({super.key});
@@ -14,7 +11,7 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text('profile'.tr),
         centerTitle: true,
@@ -67,7 +64,7 @@ class ProfileView extends GetView<ProfileController> {
         children: [
           CircleAvatar(
             radius: 50,
-            backgroundColor: kSearchbarColor,
+            backgroundColor: AppColors.searchBar,
             backgroundImage: user?.photoURL != null
                 ? NetworkImage(user!.photoURL!)
                 : const AssetImage('assets/images/default_avatar.png')

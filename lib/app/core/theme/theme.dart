@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:komikaze/app/core/constants/colors.dart';
 
 class AppTheme {
   // Warna Utama
   static const Color _primaryColorLight = Color(0xFF1E88E5); // Biru Muda
-  static const Color _primaryColorDark = Color(0xFF64B5F6); // Biru Muda Terang
+  static const Color _primaryColorDark = AppColors.primary;
 
   // Warna Aksen
   static const Color _accentColorLight = Color(0xFF26A69A); // Hijau Teal

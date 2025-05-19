@@ -1,13 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:komikaze/app/core/constants/colors.dart';
 import 'package:komikaze/app/data/models/history.dart';
 import 'package:komikaze/app/modules/history/controllers/history_controller.dart';
 import 'package:komikaze/app/routes/app_pages.dart';
-
-const kBackgroundColor = Color(0xff121012);
-const kButtonColor = Color.fromARGB(255, 89, 54, 133);
-const kSearchbarColor = Color(0xff382C3E);
 
 class HistoryView extends GetView<HistoryController> {
   const HistoryView({super.key});
@@ -15,7 +12,7 @@ class HistoryView extends GetView<HistoryController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text('history_title'.tr),
         centerTitle: true,
@@ -77,7 +74,7 @@ class HistoryView extends GetView<HistoryController> {
     return Card(
       elevation: 0,
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      color: kSearchbarColor,
+      color: AppColors.searchBar,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -178,7 +175,7 @@ class HistoryView extends GetView<HistoryController> {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: kButtonColor,
+                          backgroundColor: AppColors.primary,
                           padding: const EdgeInsets.symmetric(vertical: 0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(9),

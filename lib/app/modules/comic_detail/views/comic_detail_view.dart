@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:komikaze/app/core/constants/colors.dart';
 import 'package:komikaze/app/data/models/comic_detail.dart';
 import 'package:komikaze/app/data/models/history.dart';
 import 'package:komikaze/app/modules/comic_detail/controllers/comic_detail_controller.dart';
@@ -7,19 +8,13 @@ import 'package:komikaze/app/modules/history/controllers/history_controller.dart
 import 'package:komikaze/app/routes/app_pages.dart';
 import 'package:readmore/readmore.dart';
 
-const kBackgroundColor = Color(0xff121012);
-const kButtonColor = Color.fromARGB(255, 89, 54, 133);
-const kSearchbarColor = Color(0xff382C3E);
-
 class ComicDetailView extends GetView<ComicDetailController> {
   const ComicDetailView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    
-
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.background,
       body: Obx(() {
         if (controller.isLoading.value) {
           return Stack(
@@ -85,21 +80,21 @@ class ComicDetailView extends GetView<ComicDetailController> {
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;
                 return Container(
-                  color: kSearchbarColor,
+                  color: AppColors.searchBar,
                   child: Center(
                     child: CircularProgressIndicator(
                       value: loadingProgress.expectedTotalBytes != null
                           ? loadingProgress.cumulativeBytesLoaded /
                               loadingProgress.expectedTotalBytes!
                           : null,
-                      color: kButtonColor,
+                      color: AppColors.primary,
                     ),
                   ),
                 );
               },
               errorBuilder: (context, error, stackTrace) {
                 return Container(
-                  color: kSearchbarColor,
+                  color: AppColors.searchBar,
                   child: const Center(
                     child: Icon(
                       Icons.broken_image_rounded,
@@ -120,8 +115,8 @@ class ComicDetailView extends GetView<ComicDetailController> {
                   colors: [
                     Colors.transparent,
                     Colors.transparent,
-                    kBackgroundColor.withOpacity(0.8),
-                    kBackgroundColor,
+                    AppColors.background.withOpacity(0.8),
+                    AppColors.background,
                   ],
                   stops: const [0.0, 0.4, 0.75, 1.0],
                 ),
@@ -178,7 +173,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
             children: [
               SizedBox(width: index == 0 ? 0 : 8),
               ActionChip(
-                backgroundColor: kSearchbarColor,
+                backgroundColor: AppColors.searchBar,
                 side: BorderSide.none,
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 label: Text(
@@ -206,8 +201,8 @@ class ComicDetailView extends GetView<ComicDetailController> {
           comic.synopsis,
           trimLines: 3,
           trimMode: TrimMode.Line,
-          moreStyle: const TextStyle(color: kButtonColor),
-          lessStyle: const TextStyle(color: kButtonColor),
+          moreStyle: const TextStyle(color: AppColors.primary),
+          lessStyle: const TextStyle(color: AppColors.primary),
           style: const TextStyle(
             color: Colors.white70,
             height: 1.5,
@@ -293,7 +288,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
               return Card(
                 margin: EdgeInsets.zero,
                 elevation: 0,
-                color: kSearchbarColor,
+                color: AppColors.searchBar,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -337,7 +332,14 @@ class ComicDetailView extends GetView<ComicDetailController> {
                           final progress =
                               controller.downloadingChapters[chapter.chapterId];
                           if (progress != null) {
-                            return CircularProgressIndicator(value: progress);
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 9),
+                              child: SizedBox(
+                                  width: 28,
+                                  height: 28,
+                                  child: CircularProgressIndicator(
+                                      value: progress)),
+                            );
                           }
                           return IconButton(
                             icon: Icon(
@@ -386,7 +388,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
         Expanded(
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: kButtonColor,
+              backgroundColor: AppColors.primary,
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -416,7 +418,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
         Expanded(
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: kButtonColor,
+              backgroundColor: AppColors.primary,
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -448,7 +450,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
 
   Widget _buildCloseButton(BuildContext context) {
     return Positioned(
-      top: 60,
+      top: 45,
       left: 20,
       child: Container(
         decoration: const BoxDecoration(
@@ -456,7 +458,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
           color: Colors.black38,
         ),
         child: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Get.back(),
           icon: const Icon(
             Icons.close_rounded,
             color: Colors.white,
@@ -526,7 +528,7 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 480,
-      color: kSearchbarColor,
+      color: AppColors.searchBar,
     );
   }
 
@@ -538,7 +540,7 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
           width: 500,
           height: 30,
           decoration: BoxDecoration(
-            color: kSearchbarColor,
+            color: AppColors.searchBar,
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -547,7 +549,7 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
           width: 150,
           height: 15,
           decoration: BoxDecoration(
-            color: kSearchbarColor,
+            color: AppColors.searchBar,
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -570,7 +572,7 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
                 width: 70,
                 height: 32,
                 decoration: BoxDecoration(
-                  color: kSearchbarColor,
+                  color: AppColors.searchBar,
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
@@ -589,7 +591,7 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
           width: double.infinity,
           height: 12,
           decoration: BoxDecoration(
-            color: kSearchbarColor,
+            color: AppColors.searchBar,
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -598,7 +600,7 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
           width: double.infinity,
           height: 12,
           decoration: BoxDecoration(
-            color: kSearchbarColor,
+            color: AppColors.searchBar,
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -607,7 +609,7 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
           width: 200,
           height: 12,
           decoration: BoxDecoration(
-            color: kSearchbarColor,
+            color: AppColors.searchBar,
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -626,7 +628,7 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
               width: 180,
               height: 14,
               decoration: BoxDecoration(
-                color: kSearchbarColor,
+                color: AppColors.searchBar,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -643,7 +645,7 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
           child: Container(
             height: 50,
             decoration: BoxDecoration(
-              color: kSearchbarColor,
+              color: AppColors.searchBar,
               borderRadius: BorderRadius.circular(12),
             ),
           ),
@@ -653,7 +655,7 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
           child: Container(
             height: 50,
             decoration: BoxDecoration(
-              color: kSearchbarColor,
+              color: AppColors.searchBar,
               borderRadius: BorderRadius.circular(12),
             ),
           ),
@@ -670,7 +672,7 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
           width: 100,
           height: 20,
           decoration: BoxDecoration(
-            color: kSearchbarColor,
+            color: AppColors.searchBar,
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -678,7 +680,7 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
         Container(
           height: 50,
           decoration: BoxDecoration(
-            color: kSearchbarColor,
+            color: AppColors.searchBar,
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -690,7 +692,7 @@ class ComicDetailSkeletonLoader extends StatelessWidget {
               Container(
                 height: 70,
                 decoration: BoxDecoration(
-                  color: kSearchbarColor,
+                  color: AppColors.searchBar,
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:komikaze/app/core/constants/colors.dart';
 import 'package:komikaze/app/modules/login/controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -8,7 +9,7 @@ class LoginView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[900], 
+      backgroundColor: AppColors.background,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -30,7 +31,7 @@ class LoginView extends GetView<LoginController> {
               ElevatedButton(
                 onPressed: controller.loginWithGoogle,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey[800], 
+                  backgroundColor: Colors.grey[800],
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     vertical: 16,
@@ -65,7 +66,7 @@ class LoginView extends GetView<LoginController> {
               const SizedBox(height: 20),
 
               Text(
-                'Login dan nikmati komik favoritmu.',
+                'login_slogan'.tr,
                 style: TextStyle(
                   color: Colors.grey[400],
                   fontSize: 14,

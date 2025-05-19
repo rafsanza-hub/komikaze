@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:komikaze/app/core/constants/colors.dart';
 import 'package:komikaze/app/modules/genre_detail/controllers/genre_detail_controller.dart';
 import 'package:komikaze/app/routes/app_pages.dart';
 import 'package:komikaze/app/widgets/custom_card_normal.dart';
 
-const kBackgroundColor = Color(0xff121012);
 
 class GenreDetailView extends GetView<GenreDetailController> {
   const GenreDetailView({super.key});
@@ -24,7 +24,7 @@ class GenreDetailView extends GetView<GenreDetailController> {
     });
 
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -62,9 +62,9 @@ class GenreDetailView extends GetView<GenreDetailController> {
               SliverGrid(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  childAspectRatio: 0.7,
+                  childAspectRatio: 0.75,
                   crossAxisSpacing: 8,
-                  mainAxisSpacing: 12,
+                  mainAxisExtent: 200,
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {

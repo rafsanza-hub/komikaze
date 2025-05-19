@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:komikaze/app/core/constants/colors.dart';
 import 'package:komikaze/app/modules/download/controllers/download_controller.dart';
 import 'package:komikaze/app/routes/app_pages.dart';
-
-const kBackgroundColor = Color(0xff121012);
-const kButtonColor = Color.fromARGB(255, 89, 54, 133);
-const kSearchbarColor = Color(0xff382C3E);
 
 class DownloadView extends GetView<DownloadController> {
   const DownloadView({super.key});
@@ -13,7 +10,7 @@ class DownloadView extends GetView<DownloadController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -21,8 +18,6 @@ class DownloadView extends GetView<DownloadController> {
           'downloads'.tr,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
           ),
         ),
       ),
@@ -51,7 +46,7 @@ class DownloadView extends GetView<DownloadController> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: kButtonColor,
+                    backgroundColor: AppColors.primary,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12)),
                   ),
@@ -66,19 +61,19 @@ class DownloadView extends GetView<DownloadController> {
           );
         }
         return ListView.separated(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           separatorBuilder: (context, index) => const SizedBox(height: 10),
           itemCount: controller.downloadedChapters.length,
           itemBuilder: (context, index) {
             final chapter = controller.downloadedChapters[index];
             return Card(
               margin: EdgeInsets.zero,
-              color: kSearchbarColor,
+              color: AppColors.searchBar,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
               child: ListTile(
                 contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                 leading: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.network(

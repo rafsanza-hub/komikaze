@@ -25,6 +25,8 @@ void main() async {
   final user = FirebaseAuth.instance.currentUser;
   runApp(
     GetMaterialApp(
+
+      debugShowCheckedModeBanner: false,
       title: "Application",
       theme: AppTheme.darkTheme,
       translations: AppTranslations(),

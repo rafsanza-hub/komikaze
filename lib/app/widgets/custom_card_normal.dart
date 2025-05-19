@@ -29,86 +29,74 @@ class CustomCardNormal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          height: 170,
-          width: 120,
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            image: DecorationImage(
-              image: CachedNetworkImageProvider(imageUrl),
-              fit: BoxFit.cover,
-            ),
-          ),
-          foregroundDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            gradient: LinearGradient(
-              begin: Alignment.center,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.transparent,
-                Colors.black.withOpacity(0.6),
-                Colors.black.withOpacity(0.8),
-              ],
-              stops: const [0.5, 0.8, 1.0],
-            ),
-          ),
-        ),
-        Positioned(
-          left: 7,
-          top: 8,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.7),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Text(
-              chapter,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
+        Stack(
+          children: [
+            Container(
+              height: 150, // Reduced height since title is now below
+              width: 120,
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(imageUrl),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              foregroundDecoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
-          ),
+            Positioned(
+              left: 7,
+              top: 7,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.7),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  chapter,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            if (type != null)
+              Positioned(
+                right: 9,
+                top: 7,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(2),
+                  child: CachedNetworkImage(
+                    imageUrl: getFlagImage(type),
+                  ),
+                ),
+              ),
+          ],
         ),
-        Positioned(
-          left: 4,
-          right: 4,
-          bottom: 13,
+        const SizedBox(height: 4), // Add some space between card and title
+        Container(
+          width: 120,
+          padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Text(
             title,
             maxLines: 2,
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.start, // Changed from center to start
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              color: Colors.white,
+              color: Colors.white, // Changed from white to black
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              shadows: [
-                Shadow(
-                  offset: Offset(0, 1),
-                  blurRadius: 3.0,
-                  color: Colors.black,
-                ),
-              ],
             ),
           ),
         ),
-        if (type != null)
-          Positioned(
-            right: 9,
-            top: 8,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(2),
-              child: CachedNetworkImage(
-                imageUrl: getFlagImage(type),
-              ),
-            ),
-          ),
       ],
     );
   }

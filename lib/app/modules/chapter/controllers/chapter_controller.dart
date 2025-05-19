@@ -7,6 +7,8 @@ import 'package:get_storage/get_storage.dart';
 class ChapterController extends GetxController {
   final ComicService _comicService = ComicService();
   final GetStorage _storage = GetStorage();
+  // final args =  as Map<String, dynamic>;
+  final chapterId = Get.arguments['chapterId'];
 
   var chapterData = ChapterData(
     chapter: DataChapter(
@@ -51,7 +53,8 @@ class ChapterController extends GetxController {
         chapterData.value = await _comicService.fetchChapter(chapterId);
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to fetch chapter: $e');
+      // Get.snackbar('Error', 'Failed to fetch chapter: $e');
+      print('Error fetching chapter: $e');
     } finally {
       isLoading(false);
     }
@@ -82,5 +85,12 @@ class ChapterController extends GetxController {
     if (showChapterList.value) {
       showNavigation.value = true;
     }
+  }
+
+  @override
+  void onInit() {
+    fetchChapter(chapterId);
+
+    super.onInit();
   }
 }

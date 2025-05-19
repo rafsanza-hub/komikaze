@@ -10,9 +10,6 @@ class ChapterView extends GetView<ChapterController> {
 
   @override
   Widget build(BuildContext context) {
-    final args = Get.arguments as Map<String, dynamic>;
-    final chapterId = args['chapterId'] as String;
-    controller.fetchChapter(chapterId);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (controller.chapterData.value.chapter.images.isNotEmpty &&
@@ -129,16 +126,17 @@ class ChapterView extends GetView<ChapterController> {
                         ? Colors.white
                         : Colors.grey,
                     onPressed: () {
-                      if (chapter.nextChapter == null ||
-                          controller.isOffline.value) {
-                        return;
-                      }
+                      // if (chapter.nextChapter == null ||
+                      //     controller.isOffline.value) {
+                      //   return;
+                      // }
                       final nextChapter =
                           chapter.nextChapter!.split('/').elementAt(4);
-                      Get.toNamed(Routes.CHAPTER, arguments: {
+                      print('Next chapter: $nextChapter');
+                      Get.back();
+                      Get.toNamed('chapter', arguments: {
                         'chapterId': nextChapter,
-                        'comicId': Get.arguments['comicId'],
-                        'comicTitle': Get.arguments['comicTitle'],
+      
                       });
                     },
                   ),
