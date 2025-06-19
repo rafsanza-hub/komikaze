@@ -1,11 +1,12 @@
-name: Build Flutter APK
+
+name: Build Flutter APK and Distribute
 
 on:
   push:
     branches: [master]
 
 jobs:
-  build:
+  build-and-distribute:
     runs-on: ubuntu-latest
     environment: production
 
@@ -63,3 +64,13 @@ jobs:
           name: komikaze-v1.0.${{ github.run_number }}
           path: build/app/outputs/flutter-apk/app-release.apk
           retention-days: 7
+
+      - name: Distribute to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+          groups: testers
+          file: build/app/outputs/flutter-apk/app-release.apk
+          releaseNotes: "Automatic release build #${{ github.run_number }}"
+          debug: true 
