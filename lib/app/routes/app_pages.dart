@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/bookmark/bindings/bookmark_binding.dart';
+import '../modules/bookmark/views/bookmark_view.dart';
 import '../modules/chapter/bindings/chapter_binding.dart';
 import '../modules/chapter/views/chapter_view.dart';
 import '../modules/comic_detail/bindings/comic_detail_binding.dart';
@@ -85,6 +87,11 @@ class AppPages {
       name: _Paths.HISTORY,
       page: () => const HistoryView(),
       binding: HistoryBinding(),
+    ),
+    GetPage(
+      name: _Paths.BOOKMARK,
+      page: () => const BookmarkView(),
+      binding: BookmarkBinding(),
     ),
   ];
 }

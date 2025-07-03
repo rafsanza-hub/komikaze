@@ -1,4 +1,3 @@
-
 name: Build Flutter APK and Distribute
 
 on:
@@ -19,14 +18,14 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
-          java-version: '17'
+          distribution: "zulu"
+          java-version: "17"
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.27.1'
-          channel: 'stable'
+          flutter-version: "3.27.1"
+          channel: "stable"
 
       - name: Decode keystore
         run: |
@@ -72,5 +71,5 @@ jobs:
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
           groups: testers
           file: build/app/outputs/flutter-apk/app-release.apk
-          releaseNotes: "Automatic release build #${{ github.run_number }}"
-          debug: true 
+          releaseNotes: "Build ${{ github.run_number }}"
+          debug: true

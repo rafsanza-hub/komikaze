@@ -192,7 +192,7 @@ class AppTheme {
         fontFamily: _fontFamily,
       ),
       hintStyle: TextStyle(
-        color: _textSecondaryLight.withOpacity(0.7),
+        color: _textSecondaryLight.withValues(alpha: 0.7),
         fontSize: 14,
         fontFamily: _fontFamily,
       ),
@@ -236,7 +236,7 @@ class AppTheme {
       }),
       trackColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return _primaryColorLight.withOpacity(0.5);
+          return _primaryColorLight.withValues(alpha: 0.5);
         }
         return null;
       }),
@@ -280,7 +280,7 @@ class AppTheme {
 
     // Divider Theme
     dividerTheme: DividerThemeData(
-      color: _textSecondaryLight.withOpacity(0.2),
+      color: _textSecondaryLight.withValues(alpha: 0.2),
       thickness: 1,
       space: 1,
     ),
@@ -308,9 +308,9 @@ class AppTheme {
     // Chip Theme
     chipTheme: ChipThemeData(
       backgroundColor: _surfaceLight,
-      disabledColor: _surfaceLight.withOpacity(0.5),
+      disabledColor: _surfaceLight.withValues(alpha: 0.5),
       selectedColor: _primaryColorLight,
-      secondarySelectedColor: _primaryColorLight.withOpacity(0.8),
+      secondarySelectedColor: _primaryColorLight.withValues(alpha: 0.8),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       labelStyle: const TextStyle(
         color: _textPrimaryLight,
@@ -328,8 +328,8 @@ class AppTheme {
     // Progress Indicator Theme
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: _primaryColorLight,
-      circularTrackColor: _primaryColorLight.withOpacity(0.2),
-      linearTrackColor: _primaryColorLight.withOpacity(0.2),
+      circularTrackColor: _primaryColorLight.withValues(alpha: 0.2),
+      linearTrackColor: _primaryColorLight.withValues(alpha: 0.2),
     ),
 
     // Text Theme
@@ -543,7 +543,7 @@ class AppTheme {
     // Input Decoration Theme
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: _backgroundDark.withOpacity(0.8),
+      fillColor: _backgroundDark.withValues(alpha: 0.8),
       contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_inputRadius),
@@ -571,7 +571,7 @@ class AppTheme {
         fontFamily: _fontFamily,
       ),
       hintStyle: TextStyle(
-        color: _textSecondaryDark.withOpacity(0.7),
+        color: _textSecondaryDark.withValues(alpha: 0.7),
         fontSize: 14,
         fontFamily: _fontFamily,
       ),
@@ -615,7 +615,7 @@ class AppTheme {
       }),
       trackColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return _primaryColorDark.withOpacity(0.5);
+          return _primaryColorDark.withValues(alpha: 0.5);
         }
         return null;
       }),
@@ -659,7 +659,7 @@ class AppTheme {
 
     // Divider Theme
     dividerTheme: DividerThemeData(
-      color: _textSecondaryDark.withOpacity(0.2),
+      color: _textSecondaryDark.withValues(alpha: 0.2),
       thickness: 1,
       space: 1,
     ),
@@ -687,9 +687,9 @@ class AppTheme {
     // Chip Theme
     chipTheme: ChipThemeData(
       backgroundColor: _backgroundDark,
-      disabledColor: _backgroundDark.withOpacity(0.5),
+      disabledColor: _backgroundDark.withValues(alpha: 0.5),
       selectedColor: _primaryColorDark,
-      secondarySelectedColor: _primaryColorDark.withOpacity(0.8),
+      secondarySelectedColor: _primaryColorDark.withValues(alpha: 0.8),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       labelStyle: const TextStyle(
         color: _textPrimaryDark,
@@ -707,8 +707,8 @@ class AppTheme {
     // Progress Indicator Theme
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: _primaryColorDark,
-      circularTrackColor: _primaryColorDark.withOpacity(0.2),
-      linearTrackColor: _primaryColorDark.withOpacity(0.2),
+      circularTrackColor: _primaryColorDark.withValues(alpha: 0.2),
+      linearTrackColor: _primaryColorDark.withValues(alpha: 0.2),
     ),
 
     // Text Theme

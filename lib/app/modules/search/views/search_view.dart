@@ -18,12 +18,8 @@ class SearchView extends GetView<search_controller.SearchController> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Get.back(),
-        ),
         title: const Text(
-          'Search Comics',
+          'Search',
           style: TextStyle(
             color: Colors.white,
           ),

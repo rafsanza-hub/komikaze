@@ -10,7 +10,6 @@ class ChapterView extends GetView<ChapterController> {
 
   @override
   Widget build(BuildContext context) {
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (controller.chapterData.value.chapter.images.isNotEmpty &&
           !controller.isOffline.value) {
@@ -71,11 +70,11 @@ class ChapterView extends GetView<ChapterController> {
               height: 60,
               margin: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.8),
+                color: Colors.black.withValues(alpha: 0.8),
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withValues(alpha: 0.5),
                     spreadRadius: 2,
                     blurRadius: 10,
                     offset: const Offset(0, 3),
@@ -136,7 +135,6 @@ class ChapterView extends GetView<ChapterController> {
                       Get.back();
                       Get.toNamed('chapter', arguments: {
                         'chapterId': nextChapter,
-      
                       });
                     },
                   ),

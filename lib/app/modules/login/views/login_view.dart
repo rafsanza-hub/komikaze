@@ -41,7 +41,7 @@ class LoginView extends GetView<LoginController> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   elevation: 4,
-                  shadowColor: Colors.black.withOpacity(0.4),
+                  shadowColor: Colors.black.withValues(alpha: 0.4),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

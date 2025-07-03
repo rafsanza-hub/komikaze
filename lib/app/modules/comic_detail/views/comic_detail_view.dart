@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:komikaze/app/core/constants/colors.dart';
+import 'package:komikaze/app/data/models/bookmark.dart';
 import 'package:komikaze/app/data/models/comic_detail.dart';
 import 'package:komikaze/app/data/models/history.dart';
+import 'package:komikaze/app/modules/bookmark/controllers/bookmark_controller.dart';
 import 'package:komikaze/app/modules/comic_detail/controllers/comic_detail_controller.dart';
 import 'package:komikaze/app/modules/history/controllers/history_controller.dart';
 import 'package:komikaze/app/routes/app_pages.dart';
@@ -64,6 +66,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
           ),
         ),
         _buildCloseButton(context),
+        _buildBookmarkButton(context, comic),
       ],
     );
   }
@@ -116,7 +119,7 @@ class ComicDetailView extends GetView<ComicDetailController> {
                   colors: [
                     Colors.transparent,
                     Colors.transparent,
-                    AppColors.background.withOpacity(0.8),
+                    AppColors.background.withValues(alpha: 0.8),
                     AppColors.background,
                   ],
                   stops: const [0.0, 0.4, 0.75, 1.0],
@@ -463,6 +466,55 @@ class ComicDetailView extends GetView<ComicDetailController> {
           icon: const Icon(
             Icons.close_rounded,
             color: Colors.white,
+            size: 20,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBookmarkButton(BuildContext context, ComicDetail comic) {
+    final bookmarkController = Get.find<BookmarkController>();
+    final isBookmarked =
+        bookmarkController.bookmarks.any((b) => b.comicId == comic.comicId);
+
+    return Positioned(
+      top: 45,
+      right: 20,
+      child: Container(
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.black38,
+        ),
+        child: IconButton(
+          onPressed: () {
+            if (isBookmarked) {
+              bookmarkController.deleteBookmark(comic.comicId);
+              Get.snackbar(
+                'Bookmark Removed',
+                '${comic.title} removed from bookmarks',
+                backgroundColor: AppColors.searchBar,
+                colorText: Colors.white,
+              );
+            } else {
+              final bookmark = BookmarkItem(
+                comicId: comic.comicId,
+                title: comic.title,
+                coverImage: comic.coverImage,
+                type: comic.type,
+              );
+              bookmarkController.addBookmark(bookmark);
+              Get.snackbar(
+                'Bookmark Added',
+                '${comic.title} added to bookmarks',
+                backgroundColor: AppColors.searchBar,
+                colorText: Colors.white,
+              );
+            }
+          },
+          icon: Icon(
+            isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+            color: isBookmarked ? AppColors.primary : Colors.white,
             size: 20,
           ),
         ),
